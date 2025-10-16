@@ -1,0 +1,20 @@
+package dgpejbf.portal;
+
+import dgpejbf.portal.config.AsyncSyncConfiguration;
+import dgpejbf.portal.config.EmbeddedSQL;
+import dgpejbf.portal.config.JacksonConfiguration;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.boot.test.context.SpringBootTest;
+
+/**
+ * Base composite annotation for integration tests.
+ */
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@SpringBootTest(classes = { MonolitoApp.class, JacksonConfiguration.class, AsyncSyncConfiguration.class })
+@EmbeddedSQL
+public @interface IntegrationTest {
+}
