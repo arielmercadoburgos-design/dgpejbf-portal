@@ -14,6 +14,24 @@
         <label class="form-label" for="field_login" jhiTranslate="userManagement.login">Login</label>
         <input type="text" id="field_login" class="form-control" name="login" formControlName="login" />
 
+        <!-- agrego el campo teléfono en el html -->
+
+        <div class="mb-3">
+          <label class="form-label" for="field_telefono">Teléfono</label>
+          <input type="text" id="field_telefono" class="form-control" name="telefono" formControlName="telefono" />
+
+          <ng-container *ngIf="editForm.get('telefono') as telefonoRef">
+            <small
+              class="form-text text-danger"
+              *ngIf="telefonoRef.invalid && (telefonoRef.dirty || telefonoRef.touched) && telefonoRef.errors?.maxlength"
+              jhiTranslate="entity.validation.maxlength"
+              [translateValues]="{ max: '20' }"
+            >
+              Este campo no puede superar más de 20 caracteres.
+            </small>
+          </ng-container>
+        </div>
+
         @let loginRef = editForm.get('login')!;
         @if (loginRef.invalid && (loginRef.dirty || loginRef.touched)) {
           <div>
