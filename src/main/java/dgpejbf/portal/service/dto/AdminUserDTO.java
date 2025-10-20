@@ -4,10 +4,12 @@ import dgpejbf.portal.config.Constants;
 import dgpejbf.portal.domain.Authority;
 import dgpejbf.portal.domain.User;
 import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 
 /**
  * A DTO representing a user, with his authorities.
@@ -32,6 +34,9 @@ public class AdminUserDTO implements Serializable {
     @Email
     @Size(min = 5, max = 254)
     private String email;
+
+    @Size(max = 20)
+    private String telefono;
 
     @Size(max = 256)
     private String imageUrl;
@@ -61,6 +66,7 @@ public class AdminUserDTO implements Serializable {
         this.firstName = user.getFirstName();
         this.lastName = user.getLastName();
         this.email = user.getEmail();
+        this.telefono = user.getTelefono();
         this.activated = user.isActivated();
         this.imageUrl = user.getImageUrl();
         this.langKey = user.getLangKey();
@@ -109,6 +115,14 @@ public class AdminUserDTO implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     public String getImageUrl() {
@@ -183,6 +197,7 @@ public class AdminUserDTO implements Serializable {
             ", firstName='" + firstName + '\'' +
             ", lastName='" + lastName + '\'' +
             ", email='" + email + '\'' +
+            ", telefono='" + telefono + '\'' +
             ", imageUrl='" + imageUrl + '\'' +
             ", activated=" + activated +
             ", langKey='" + langKey + '\'' +

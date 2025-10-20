@@ -1,6 +1,7 @@
 package dgpejbf.portal.service.dto;
 
 import dgpejbf.portal.domain.User;
+import jakarta.persistence.Column;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -39,6 +40,19 @@ public class UserDTO implements Serializable {
 
     public void setLogin(String login) {
         this.login = login;
+    }
+
+    //agregue el campo telefono para usuario
+
+    @Column(name = "telefono")
+    private String telefono;
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
     }
 
     @Override
