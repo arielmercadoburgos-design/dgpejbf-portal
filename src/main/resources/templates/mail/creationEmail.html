@@ -1,20 +1,23 @@
 <!doctype html>
 <html xmlns:th="http://www.thymeleaf.org" th:lang="${#locale.language}" lang="en">
   <head>
-    <title th:text="#{email.activation.title}">JHipster creation</title>
+    <title>Activacion de usuario DGPEJBF-PORTAL</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <link rel="icon" th:href="@{|${baseUrl}/favicon.ico|}" />
   </head>
   <body>
-    <p th:text="#{email.activation.greeting(${user.login})}">Dear</p>
-    <p th:text="#{email.creation.text1}">Your JHipster account has been created, please click on the URL below to access it:</p>
+    <p>Hola, <span th:text="#{email.activation.greeting(${user.login})}"></span></p>
     <p>
-      <a th:with="url=(@{|${baseUrl}/account/reset/finish?key=${user.resetKey}|})" th:href="${url}" th:text="${url}">Login link</a>
+      Desde la Dirección General de Personas y Estructuras Jurídicas y de Beneficiarios Finales le informamos que ha sido creado su
+      credencial de acceso (clave), ingrese al módulo al siguiente link:
     </p>
     <p>
-      <span th:text="#{email.activation.text2}">Regards, </span>
+      <a th:href="@{|${baseUrl}/account/reset/finish?key=${user.resetKey}|}">Activar cuenta</a>
+    </p>
+    <p>
+      <span>Saludos, </span>
       <br />
-      <em th:text="#{email.signature}">JHipster.</em>
+      <em>Departamento de informática.-</em>
     </p>
   </body>
 </html>

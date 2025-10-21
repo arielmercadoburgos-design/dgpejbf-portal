@@ -20,6 +20,88 @@ spring:
   config:
     activate:
       on-profile: '!api-docs'
+  #configuracion para emailes salientes
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: dgpejbfinformatica@gmail.com
+    password: esnrzofsqtnrxhyz
+    protocol: smtp
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+          ssl:
+            trust: smtp.gmail.com
+  application:
+    name: monolito
+  docker:
+    compose:
+      enabled: false
+      lifecycle-management: start-only
+      file: src/main/docker/services.yml
+
+  jmx:
+    enabled: false
+  data:
+    jpa:
+      repositories:
+        bootstrap-mode: deferred
+  jpa:
+    open-in-view: false
+    properties:
+      hibernate.jdbc.time_zone: UTC
+      hibernate.timezone.default_storage: NORMALIZE
+      hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: true
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      # modify batch size as necessary
+      hibernate.jdbc.batch_size: 25
+      hibernate.order_inserts: true
+      hibernate.order_updates: true
+      hibernate.query.fail_on_pagination_over_collection_fetch: true
+      hibernate.query.in_clause_parameter_padding: true
+    hibernate:
+      ddl-auto: none
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+  messages:
+    basename: i18n/messages
+  main:
+    allow-bean-definition-overriding: true
+  mvc:
+    problemdetails:
+      enabled: true
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          authority-prefix: ''
+          authorities-claim-name: auth
+  task:
+    execution:
+      thread-name-prefix: monolito-task-
+      pool:
+        core-size: 2
+        max-size: 50
+        queue-capacity: 10000
+    scheduling:
+      thread-name-prefix: monolito-scheduling-
+      pool:
+        size: 2
+  thymeleaf:
+    mode: HTML
+  output:
+    ansi:
+      onsole-available: true
+
 springdoc:
   api-docs:
     enabled: false
@@ -90,82 +172,17 @@ management:
     tags:
       application: ${spring.application.name}
 
-spring:
-  application:
-    name: monolito
-  docker:
-    compose:
-      enabled: false
-      lifecycle-management: start-only
-      file: src/main/docker/services.yml
-  profiles:
-    # The commented value for `active` can be replaced with valid Spring profiles to load.
-    # Otherwise, it will be filled in by maven when building the JAR file
-    # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
-    active: '@spring.profiles.active@'
-    group:
-      dev:
-        - dev
-        - api-docs
-        # Uncomment to activate TLS for the dev profile
-        #- tls
-  jmx:
-    enabled: false
-  data:
-    jpa:
-      repositories:
-        bootstrap-mode: deferred
-  jpa:
-    open-in-view: false
-    properties:
-      hibernate.jdbc.time_zone: UTC
-      hibernate.timezone.default_storage: NORMALIZE
-      hibernate.type.preferred_instant_jdbc_type: TIMESTAMP
-      hibernate.id.new_generator_mappings: true
-      hibernate.connection.provider_disables_autocommit: true
-      hibernate.cache.use_second_level_cache: true
-      hibernate.cache.use_query_cache: false
-      hibernate.generate_statistics: false
-      # modify batch size as necessary
-      hibernate.jdbc.batch_size: 25
-      hibernate.order_inserts: true
-      hibernate.order_updates: true
-      hibernate.query.fail_on_pagination_over_collection_fetch: true
-      hibernate.query.in_clause_parameter_padding: true
-    hibernate:
-      ddl-auto: none
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
-  messages:
-    basename: i18n/messages
-  main:
-    allow-bean-definition-overriding: true
-  mvc:
-    problemdetails:
-      enabled: true
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          authority-prefix: ''
-          authorities-claim-name: auth
-  task:
-    execution:
-      thread-name-prefix: monolito-task-
-      pool:
-        core-size: 2
-        max-size: 50
-        queue-capacity: 10000
-    scheduling:
-      thread-name-prefix: monolito-scheduling-
-      pool:
-        size: 2
-  thymeleaf:
-    mode: HTML
-  output:
-    ansi:
-      console-available: true
+profiles:
+  # The commented value for `active` can be replaced with valid Spring profiles to load.
+  # Otherwise, it will be filled in by maven when building the JAR file
+  # Either way, it can be overridden by `--spring.profiles.active` value passed in the commandline or `-Dspring.profiles.active` set in `JAVA_OPTS`
+  active: '@spring.profiles.active@'
+  group:
+    dev:
+      - dev
+      - api-docs
+      # Uncomment to activate TLS for the dev profile
+      #- tls
 
 server:
   servlet:
@@ -190,6 +207,11 @@ info:
 jhipster:
   clientApp:
     name: 'monolitoApp'
+
+  mail:
+    from: dgpejbfinformatica@gmail.com
+    base-url: http://localhost:9191
+
   # By default CORS is disabled. Uncomment to enable.
   # cors:
   #   allowed-origins: "http://localhost:8100,http://localhost:9000"
@@ -198,8 +220,6 @@ jhipster:
   #   exposed-headers: "Authorization,Link,X-Total-Count,X-${jhipster.clientApp.name}-alert,X-${jhipster.clientApp.name}-error,X-${jhipster.clientApp.name}-params"
   #   allow-credentials: true
   #   max-age: 1800
-  mail:
-    from: monolito@localhost
   api-docs:
     default-include-pattern: /api/**
     management-include-pattern: /management/**
@@ -214,6 +234,17 @@ jhipster:
     license-url:
   security:
     content-security-policy: "default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:"
+
+logging:
+  level:
+    org:
+      springframework:
+        mail: DEBUG
+        javamail: DEBUG
+    dgpejbf:
+      portal:
+        service:
+          MailService: DEBUG
 
 # jhipster-needle-add-application-yaml-document
 ---
