@@ -1,82 +1,56 @@
-<div class="row">
-  <div class="col-md-3">
-    <span class="hipster img-fluid rounded"></span>
+<div class="home-container text-center mt-5">
+  <h1 class="display-4 fw-bold text-primary">¡BIENVENIDOS, AL PORTAL DE LA DGPEJBF!</h1>
+  <p class="lead text-muted mb-5">Esta es su página de inicio</p>
+
+  <!-- Cuadro informativo -->
+  <div class="info-panel card shadow-sm mb-5 mx-auto">
+    <div class="card-body">
+      <p class="mb-3">
+        Esta plataforma digital contiene información disponible de los
+        <strong>Registros Administrativos</strong> correspondientes a las personas y estructuras jurídicas que operan en la República del
+        Paraguay, conforme a la <strong>Ley N° 6446/2019</strong>.
+      </p>
+      <p class="mb-4">
+        Los datos se publican en formatos abiertos y estandarizados con el fin de promover la transparencia corporativa y la participación
+        ciudadana.
+      </p>
+
+      <h5 class="text-center fw-bold mb-3 text-primary">¿Qué datos podemos encontrar?</h5>
+      <ul class="text-start ms-4">
+        <li>
+          <strong>Listado de Personas o Estructuras Jurídicas (P.E.J.)</strong> que realizaron su comunicación en los registros
+          administrativos.
+        </li>
+        <li>Consulta y/o validación de documentos emitidos.</li>
+        <li>Estadísticas.</li>
+      </ul>
+    </div>
   </div>
 
-  <div class="col-md-9">
-    <h1 class="display-4"><span>¡BIENVENIDOS, AL PORTAL DE LA DGPEJBF !</span></h1>
+  <!-- Bloques de login y registro -->
+  <div>
+    @if (account() !== null) {
+      <div class="alert alert-success">
+        @if (account(); as accountRef) {
+          <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }">
+            Está conectado como "{{ accountRef.login }}".
+          </span>
+        }
+      </div>
+    } @else {
+      <div class="alert alert-warning">
+        <span jhiTranslate="global.messages.info.authenticated.prefix">Si desea </span>
+        <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">iniciar sesión</a>
+        <span jhiTranslate="global.messages.info.authenticated.suffix">
+          , puede intentar con las cuentas predeterminadas:<br />- Administrador (usuario="admin" y contraseña="admin") <br />- Usuario
+          (usuario="user" y contraseña="user").
+        </span>
+      </div>
 
-    <p class="lead" jhiTranslate="home.subtitle">Esta es su página de inicio</p>
-
-    <div>
-      @if (account() !== null) {
-        <div class="alert alert-success">
-          @if (account(); as accountRef) {
-            <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }"
-              >Está conectado como &quot;{{ accountRef.login }}&quot;.</span
-            >
-          }
-        </div>
-      } @else {
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.authenticated.prefix">Si desea </span>
-          <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">iniciar sesión</a
-          ><span jhiTranslate="global.messages.info.authenticated.suffix"
-            >, puede intentar con las cuentas predeterminadas:<br />- Administrador (usuario=&quot;admin&quot; y
-            contraseña=&quot;admin&quot;) <br />- Usuario (usuario=&quot;user&quot; y contraseña=&quot;user&quot;).</span
-          >
-        </div>
-
-        <div class="alert alert-warning">
-          <span jhiTranslate="global.messages.info.register.noaccount">¿Aún no tienes una cuenta?</span>&nbsp;
-          <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Crea una cuenta</a>
-        </div>
-      }
-    </div>
-
-    <p jhiTranslate="home.question">Si tiene preguntas sobre JHipster:</p>
-
-    <ul>
-      <li>
-        <a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.homepage"
-          >Página de inicio de JHipster</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://stackoverflow.com/tags/jhipster/info"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.stackoverflow"
-          >JHipster en Stack Overflow</a
-        >
-      </li>
-      <li>
-        <a
-          href="https://github.com/jhipster/generator-jhipster/issues?state=open"
-          target="_blank"
-          rel="noopener noreferrer"
-          jhiTranslate="home.link.bugtracker"
-          >JHipster seguimiento de errores</a
-        >
-      </li>
-      <li>
-        <a href="https://gitter.im/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.chat"
-          >Sala de chat pública de JHipster</a
-        >
-      </li>
-      <li>
-        <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.link.follow"
-          >contacto &#64;jhipster en Twitter</a
-        >
-      </li>
-    </ul>
-
-    <p>
-      <span jhiTranslate="home.like">Si te gusta JHipster, danos una estrella en</span>
-      <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" jhiTranslate="home.github"
-        >GitHub</a
-      >!
-    </p>
+      <div class="alert alert-warning">
+        <span jhiTranslate="global.messages.info.register.noaccount">¿Aún no tienes una cuenta?</span>&nbsp;
+        <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Crea una cuenta</a>
+      </div>
+    }
   </div>
 </div>

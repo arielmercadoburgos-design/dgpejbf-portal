@@ -5,11 +5,19 @@ import dayjs from 'dayjs/esm';
 
 import { AccountService } from 'app/core/auth/account.service';
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
-import FooterComponent from '../footer/footer.component';
+
+// ✅ FooterComponent: export nombrado (coincide con tu footer.component.ts)
+import { FooterComponent } from '../footer/footer.component';
+
+// ⚠️ PageRibbonComponent suele ser default export en JHipster 8
+// Si en tu archivo tiene "export default class ...", usá default:
 import PageRibbonComponent from '../profiles/page-ribbon.component';
+// Si NO es default (tiene "export class ..."), entonces:
+// import { PageRibbonComponent } from '../profiles/page-ribbon.component';
 
 @Component({
   selector: 'jhi-main',
+  standalone: true,
   templateUrl: './main.component.html',
   providers: [AppPageTitleStrategy],
   imports: [RouterOutlet, FooterComponent, PageRibbonComponent],
@@ -28,7 +36,6 @@ export default class MainComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // try to log in automatically
     this.accountService.identity().subscribe();
 
     this.translateService.onLangChange.subscribe((langChangeEvent: LangChangeEvent) => {

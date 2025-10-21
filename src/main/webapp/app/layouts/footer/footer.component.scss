@@ -1,0 +1,25 @@
+.footer {
+  background-color: #f8f9fa; // gris institucional claro
+  border-top: 3px solid #0a58ca; // azul MEF
+  color: #333;
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 1.5rem 0;
+
+  p {
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    line-height: 1.4;
+  }
+
+  .footer-subtitle {
+    font-weight: 400;
+    color: #0a58ca;
+  }
+
+  small {
+    display: block;
+    font-size: 0.85rem;
+    color: #6c757d;
+  }
+}

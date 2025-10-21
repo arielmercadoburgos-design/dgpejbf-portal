@@ -23,3 +23,8 @@ Development Ribbon
     pointer-events: none;
   }
 }
+
+/* Para quitar la cinta roja*/
+.ribbon {
+  display: none !important;
+}
