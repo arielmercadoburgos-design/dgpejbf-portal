@@ -3,6 +3,8 @@ package dgpejbf.portal.security;
 import dgpejbf.portal.domain.Authority;
 import dgpejbf.portal.domain.User;
 import dgpejbf.portal.repository.UserRepository;
+import dgpejbf.portal.web.rest.errors.UserExpiredException;
+import java.time.LocalDate;
 import java.util.*;
 import org.hibernate.validator.internal.constraintvalidators.hv.EmailValidator;
 import org.slf4j.Logger;
@@ -52,6 +54,15 @@ public class DomainUserDetailsService implements UserDetailsService {
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
+
+        // 🔍 Log de depuración
+        LOG.debug("Fecha de expiración de {}: {}", lowercaseLogin, user.getFechaExpiracion());
+        //aqui agrego valifación de fecha de expiración ariel mercado 22/10/2025
+
+        if (user.getFechaExpiracion() != null && user.getFechaExpiracion().isBefore(LocalDate.now())) {
+            throw new UserExpiredException(lowercaseLogin);
+        }
+
         return UserWithId.fromUser(user);
     }
 

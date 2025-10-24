@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -84,6 +85,17 @@ public class User extends AbstractAuditingEntity<Long> implements Serializable {
 
     @Column(name = "reset_date")
     private Instant resetDate = null;
+
+    @Column(name = "fecha_expiracion")
+    private LocalDate fechaExpiracion;
+
+    public LocalDate getFechaExpiracion() {
+        return fechaExpiracion;
+    }
+
+    public void setFechaExpiracion(LocalDate fechaExpiracion) {
+        this.fechaExpiracion = fechaExpiracion;
+    }
 
     @JsonIgnore
     @ManyToMany
