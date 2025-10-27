@@ -39,9 +39,12 @@ const routes: Routes = [
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
   },
-
-  { path: 'dashboard', component: DashboardComponent },
-  ...errorRoute,
+  {
+    path: 'dashboard',
+    data: { authorities: [Authority.USER] },
+    canActivate: [UserRouteAccessService],
+    loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
+  },
 ];
 
 export default routes;
