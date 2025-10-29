@@ -10,6 +10,7 @@ import dgpejbf.portal.security.SecurityUtils;
 import dgpejbf.portal.service.dto.AdminUserDTO;
 import dgpejbf.portal.service.dto.UserDTO;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -129,6 +130,8 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
+        // Establece la fecha de expiración por defecto (31/12 del año actual)
+        newUser.setFechaExpiracion(LocalDate.of(LocalDate.now().getYear(), 12, 31));
         userRepository.save(newUser);
         this.clearUserCaches(newUser);
         LOG.debug("Created Information for User: {}", newUser);
@@ -177,6 +180,8 @@ public class UserService {
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
+        // Establece la fecha de expiración por defecto (31/12 del año actual)
+        user.setFechaExpiracion(LocalDate.of(LocalDate.now().getYear(), 12, 31));
         userRepository.save(user);
         this.clearUserCaches(user);
         LOG.debug("Created Information for User: {}", user);
