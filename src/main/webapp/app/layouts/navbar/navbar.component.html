@@ -25,27 +25,31 @@
               <span jhiTranslate="global.menu.home">Inicio</span>
             </span>
           </a>
+          <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
         </li>
-        <!-- jhipster-needle-add-element-to-menu - JHipster will add new menu items here -->
-        @if (account() !== null) {
-          <li
-            ngbDropdown
-            class="nav-item dropdown pointer"
-            display="dynamic"
-            routerLinkActive="active"
-            [routerLinkActiveOptions]="{ exact: true }"
-          >
-            <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
-              <span>
-                <fa-icon icon="th-list"></fa-icon>
-                <span jhiTranslate="global.menu.entities.main">Entidades</span>
-              </span>
-            </a>
-            <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-              <!-- jhipster-needle-add-entity-to-menu - JHipster will add entities to the menu here -->
-            </ul>
-          </li>
-        }
+
+        <li
+          *ngIf="account() !== null"
+          ngbDropdown
+          class="nav-item dropdown"
+          display="dynamic"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="entity-menu" data-cy="entity">
+            <fa-icon icon="th-list"></fa-icon>
+            <span>Menú</span>
+          </a>
+          <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
+            <!-- inserto mi boton Portal de datos -->
+            <li *ngFor="let item of entitiesNavbarItems">
+              <a [routerLink]="item.route" class="dropdown-item" (click)="collapseNavbar()">
+                <fa-icon icon="chart-bar" [fixedWidth]="true" class="text-scondary"></fa-icon>
+                {{ item.name }}
+              </a>
+            </li>
+          </ul>
+        </li>
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown

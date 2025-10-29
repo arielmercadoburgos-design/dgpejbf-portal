@@ -1,23 +1,23 @@
-import { Routes } from '@angular/router';
-
-import { Authority } from 'app/config/authority.constants';
-
-import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
-import { errorRoute } from './layouts/error/error.route';
 import { Component } from '@angular/core';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { Routes } from '@angular/router';
+import { Authority } from 'app/config/authority.constants';
+import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
+import HomeComponent from './home/home.component';
 
 const routes: Routes = [
+  // 🏠 Ruta principal (inicio)
   {
     path: '',
     loadComponent: () => import('./home/home.component'),
     title: 'home.title',
   },
+  // Navbar persistente (usa outlet)
   {
     path: '',
     loadComponent: () => import('./layouts/navbar/navbar.component'),
     outlet: 'navbar',
   },
+  // 🔒 Administración (solo ADMIN)
   {
     path: 'admin',
     data: {
@@ -26,24 +26,34 @@ const routes: Routes = [
     canActivate: [UserRouteAccessService],
     loadChildren: () => import('./admin/admin.routes'),
   },
+  // 👤 Cuentas (login, register, settings, etc.)
   {
     path: 'account',
     loadChildren: () => import('./account/account.route'),
   },
+  // 🔑 Página de login
   {
     path: 'login',
     loadComponent: () => import('./login/login.component'),
     title: 'login.title',
   },
+  // 📁 Entidades (tu módulo “Portal”)
   {
-    path: '',
-    loadChildren: () => import(`./entities/entity.routes`),
-  },
-  {
-    path: 'dashboard',
+    path: 'entities/dashboard',
     data: { authorities: [Authority.USER] },
     canActivate: [UserRouteAccessService],
-    loadComponent: () => import('./dashboard/dashboard.component').then(m => m.DashboardComponent),
+    loadComponent: () => import('./entities/dashboard/dashboard.component').then(m => m.DashboardComponent),
+    title: 'Portal de datos',
+  },
+  // 📁 Portal ruta publica (home sin accesos de usuarios)
+  {
+    path: 'public',
+    component: HomeComponent,
+    data: { pageTitle: 'Bienvenido al portal público' },
+  },
+  {
+    path: '**',
+    redirectTo: '', // redirige a la página de inicio para rutas no encontradas
   },
 ];
 

@@ -12,13 +12,23 @@ import { ProfileService } from 'app/layouts/profiles/profile.service';
 import { EntityNavbarItems } from 'app/entities/entity-navbar-items';
 import { environment } from 'environments/environment';
 import ActiveMenuDirective from './active-menu.directive';
+import entitiesNavbarItem from './navbar-item.model';
+import { CommonModule } from '@angular/common';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import NavbarItem from './navbar-item.model';
 
+// Definición de la interfaz para el nuevo elemento del menú
+export interface DashboardNavbarItem extends NavbarItem {
+  route: string;
+  name: string;
+  icon: string;
+}
 @Component({
   selector: 'jhi-navbar',
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.scss',
-  imports: [RouterModule, SharedModule, HasAnyAuthorityDirective, ActiveMenuDirective],
+  standalone: true,
+  imports: [RouterModule, SharedModule, HasAnyAuthorityDirective, ActiveMenuDirective, CommonModule, RouterModule, FaIconComponent],
 })
 export default class NavbarComponent implements OnInit {
   inProduction?: boolean;
@@ -27,8 +37,16 @@ export default class NavbarComponent implements OnInit {
   openAPIEnabled?: boolean;
   version = '';
   account = inject(AccountService).trackCurrentAccount();
-  entitiesNavbarItems: NavbarItem[] = [];
-
+  entitiesNavbarItems: NavbarItem[] = EntityNavbarItems;
+  // **********************************************************
+  // Definición del nuevo elemento del menú
+  // **********************************************************
+  dashboardNavbarItem: DashboardNavbarItem = {
+    route: '/dashboard',
+    name: 'Portal de Datos', // Nombre a mostrar en el menú
+    icon: 'chart-bar', // Icono de Font Awesome para un dashboard
+    translationKey: 'global.menu.entities.dashboard', // Clave de traducción (opcional)
+  };
   private readonly loginService = inject(LoginService);
   private readonly translateService = inject(TranslateService);
   private readonly stateStorageService = inject(StateStorageService);

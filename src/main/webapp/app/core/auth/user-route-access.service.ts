@@ -25,8 +25,10 @@ export const UserRouteAccessService: CanActivateFn = (next: ActivatedRouteSnapsh
         return false;
       }
 
+      // 🚀 Si no hay sesión, redirige a la página pública
+
       stateStorageService.storeUrl(state.url);
-      router.navigate(['/login']);
+      router.navigate(['/public']); //  nueva página pública
       return false;
     }),
   );
