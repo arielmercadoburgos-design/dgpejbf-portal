@@ -1,6 +1,22 @@
-/*
- * Bootstrap overrides https://getbootstrap.com/docs/5.1/customize/sass/
- * All values defined in bootstrap source
- * https://github.com/twbs/bootstrap/blob/v5.1.3/scss/_variables.scss can be overwritten here
- * Make sure not to add !default to values here
- */
+/* === Tema institucional sobrio (accesible) === */
+
+/* Colores base (tu paleta, pero con uso más conservador) */
+$primary: #487aa1; // azul acciones
+$secondary: #6c757d; // gris neutro
+$success: #7c8071; // verde/oliva para badges suaves, no para fondos grandes
+$info: #b2d9f7; // azul claro (resaltados sutiles)
+$warning: #ffc107;
+$danger: #dc3545;
+
+$body-bg: #ffffff; // ✅ fondo institucional (blanco)
+$body-color: #3d3c3b; // ✅ texto principal oscuro (excelente legibilidad)
+
+$link-color: $primary;
+$link-hover-color: darken($primary, 12%);
+
+$border-color: #e6e8eb;
+
+/* Navbar/Footer en blanco con borde sutil (institucional) */
+$navbar-bg: #ffffff;
+$navbar-dark-color: #3d3c3b;
+$navbar-dark-hover-color: darken(#3d3c3b, 10%);

@@ -9,7 +9,7 @@ Main page styles
   background-size: contain;
 }
 
-/* wait autoprefixer update to allow simple generation of high pixel density media query */
+/* Retina / alta densidad */
 @media only screen and (-webkit-min-device-pixel-ratio: 2),
   only screen and (-moz-min-device-pixel-ratio: 2),
   only screen and (-o-min-device-pixel-ratio: 2/1),
@@ -19,36 +19,35 @@ Main page styles
     background-size: contain;
   }
 }
-/* Ocultar la columna de la imagen y usar todo el ancho para el contenido */
-.col-md-3 {
+
+/* --- Layout principal --- */
+/* Ocultar columna lateral y expandir contenido */
+.home-container .col-md-3 {
   display: none !important;
 }
 
-.col-md-9 {
+.home-container .col-md-9 {
   flex: 0 0 100% !important;
   max-width: 100% !important;
 }
 
-/* Opcional: limitar ancho y centrar el contenido del home */
-.col-md-9 > * {
-  /* si querés centrar y limitar ancho de textos/lists dentro */
+.home-container .col-md-9 > * {
   max-width: 900px;
   margin-left: auto;
   margin-right: auto;
 }
 
-/* Si en algún breakpoint querés volver a dos columnas, sacá estas reglas o usa media queries */
-
+/* --- Cuadro informativo principal --- */
 .info-panel {
   max-width: 900px;
-  margin: 2rem auto 4rem auto; // más separación del título y del pie
+  margin: 2rem auto 4rem auto;
   background-color: #f8f9fa;
   border-left: 5px solid #0a58ca;
   border-radius: 0.5rem;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.05);
 
   .card-body {
-    padding: 1.75rem 2rem; // más aire interno
+    padding: 1.75rem 2rem;
     font-size: 1.05rem;
     color: #333;
     line-height: 1.65;
@@ -59,8 +58,10 @@ Main page styles
     margin-bottom: 1rem;
   }
 
+  /* ✅ Negritas en gris institucional, no azul */
   strong {
-    color: #0a58ca;
+    color: #3d3c3b; /* gris oscuro institucional */
+    font-weight: 600; /* negrita */
   }
 
   ul {

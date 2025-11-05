@@ -1,6 +1,5 @@
 <div class="home-container text-center mt-5">
-  <h1 class="display-4 fw-bold text-primary">¡BIENVENIDOS, AL PORTAL DE LA DGPEJBF!</h1>
-  <p class="lead text-muted mb-5">Esta es su página de inicio</p>
+  <h1 class="display-6 fw-bold text-primary">¡BIENVENIDOS, AL PORTAL DE LA DGPEJBF!</h1>
 
   <!-- Cuadro informativo -->
   <div class="info-panel card shadow-sm mb-5 mx-auto">
@@ -10,12 +9,14 @@
         <strong>Registros Administrativos</strong> correspondientes a las personas y estructuras jurídicas que operan en la República del
         Paraguay, conforme a la <strong>Ley N° 6446/2019</strong>.
       </p>
+
       <p class="mb-4">
         Los datos se publican en formatos abiertos y estandarizados con el fin de promover la transparencia corporativa y la participación
         ciudadana.
       </p>
 
       <h5 class="text-center fw-bold mb-3 text-primary">¿Qué datos podemos encontrar?</h5>
+
       <ul class="text-start ms-4">
         <li>
           <strong>Listado de Personas o Estructuras Jurídicas (P.E.J.)</strong> que realizaron su comunicación en los registros
@@ -23,32 +24,5 @@
         </li>
       </ul>
     </div>
-  </div>
-
-  <!-- Bloques de login y registro -->
-  <div>
-    @if (account() !== null) {
-      <div class="alert alert-success">
-        @if (account(); as accountRef) {
-          <span id="home-logged-message" jhiTranslate="home.logged.message" [translateValues]="{ username: accountRef.login }">
-            Está conectado como "{{ accountRef.login }}".
-          </span>
-        }
-      </div>
-    } @else {
-      <div class="alert alert-warning">
-        <span jhiTranslate="global.messages.info.authenticated.prefix">Si desea </span>
-        <a class="alert-link" (click)="login()" jhiTranslate="global.messages.info.authenticated.link">iniciar sesión</a>
-        <span jhiTranslate="global.messages.info.authenticated.suffix">
-          , puede intentar con las cuentas predeterminadas:<br />- Administrador (usuario="admin" y contraseña="admin") <br />- Usuario
-          (usuario="user" y contraseña="user").
-        </span>
-      </div>
-
-      <div class="alert alert-warning">
-        <span jhiTranslate="global.messages.info.register.noaccount">¿Aún no tienes una cuenta?</span>&nbsp;
-        <a class="alert-link" routerLink="/account/register" jhiTranslate="global.messages.info.register.link">Crea una cuenta</a>
-      </div>
-    }
   </div>
 </div>

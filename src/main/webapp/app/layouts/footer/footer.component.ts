@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { TranslateDirective } from 'app/shared/language';
+
 @Component({
   selector: 'jhi-footer',
   standalone: true,
@@ -8,5 +8,4 @@ import { TranslateDirective } from 'app/shared/language';
 })
 export class FooterComponent {
   currentYear = new Date().getFullYear();
-  version = '1.0.0';
 }
