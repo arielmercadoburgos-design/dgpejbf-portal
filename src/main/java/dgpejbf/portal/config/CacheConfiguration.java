@@ -50,6 +50,7 @@ public class CacheConfiguration {
             createCache(cm, dgpejbf.portal.domain.User.class.getName());
             createCache(cm, dgpejbf.portal.domain.Authority.class.getName());
             createCache(cm, dgpejbf.portal.domain.User.class.getName() + ".authorities");
+            createCache(cm, dgpejbf.portal.domain.UserExtra.class.getName());
             // jhipster-needle-ehcache-add-entry
         };
     }

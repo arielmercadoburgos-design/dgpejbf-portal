@@ -11,6 +11,11 @@ const routes: Routes = [
     data: { pageTitle: 'Portal de Datos' },
     loadChildren: () => import('./dashboard/dashboard.routes'),
   },
+  {
+    path: 'user-extra',
+    data: { pageTitle: 'monolitoApp.userExtra.home.title' },
+    loadChildren: () => import('./user-extra/user-extra.routes'),
+  },
   /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 

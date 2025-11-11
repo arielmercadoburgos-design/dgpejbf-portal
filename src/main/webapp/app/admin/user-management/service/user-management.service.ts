@@ -7,6 +7,8 @@ import { createRequestOption } from 'app/core/request/request-util';
 import { Pagination } from 'app/core/request/request.model';
 import { IUser } from '../user-management.model';
 
+export type EntityResponseType = HttpResponse<IUser>;
+export type EntityArrayResponseType = HttpResponse<IUser[]>;
 @Injectable({ providedIn: 'root' })
 export class UserManagementService {
   private readonly http = inject(HttpClient);
@@ -14,8 +16,8 @@ export class UserManagementService {
 
   private readonly resourceUrl = this.applicationConfigService.getEndpointFor('api/admin/users');
 
-  create(user: IUser): Observable<IUser> {
-    return this.http.post<IUser>(this.resourceUrl, user);
+  create(user: Partial<IUser>): Observable<EntityResponseType> {
+    return this.http.post<IUser>(this.resourceUrl, user, { observe: 'response' });
   }
 
   update(user: IUser): Observable<IUser> {

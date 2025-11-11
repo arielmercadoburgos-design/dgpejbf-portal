@@ -12,6 +12,14 @@ export interface IUser {
   lastModifiedBy?: string;
   lastModifiedDate?: Date;
   telefono?: string | null;
+
+  // AÑADE TUS CAMPOS DE USER EXTRA AQUÍ
+  nroCedula?: string | null; // El campo que da error
+  institucion?: string | null;
+  cargo?: string | null;
+  area?: string | null;
+  telefono_ins?: string | null;
+  celular?: string | null;
 }
 
 export class User implements IUser {

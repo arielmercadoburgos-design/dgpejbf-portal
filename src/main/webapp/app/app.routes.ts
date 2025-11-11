@@ -3,6 +3,8 @@ import { Routes } from '@angular/router';
 import { Authority } from 'app/config/authority.constants';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 import HomeComponent from './home/home.component';
+import { UserFormComponent } from './user-form/user-form.component';
+import { DashboardPublicoComponent } from './dashboard-publico/dashboard-publico.component';
 
 const routes: Routes = [
   // 🏠 Ruta principal (inicio)
@@ -50,6 +52,16 @@ const routes: Routes = [
     path: 'public',
     component: HomeComponent,
     data: { pageTitle: 'Bienvenido al portal público' },
+  },
+  {
+    path: 'user-form', // nueva ruta
+    loadComponent: () => import('./user-form/user-form.component').then(m => m.UserFormComponent),
+    title: 'Formulario de Usuario',
+  },
+  {
+    path: 'dashboard-publico',
+    component: DashboardPublicoComponent,
+    data: { pageTitle: 'dashboardPublico.title' },
   },
   {
     path: '**',
