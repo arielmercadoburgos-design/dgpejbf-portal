@@ -111,7 +111,11 @@ jhipster:
       port: 8080
       ring-buffer-size: 512
 # ===================================================================
-# Application specific properties
+metabase:
+  site-url: 'http://10.1.90.240:3000'
+  secret-key: '20c9b2a410e0c08e87a8fd1ecf61edf9811ecd38e76734e5764e753505c82ee3'
+
+  # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
 # to have type-safe configuration, like in the JHipsterProperties above
 #
