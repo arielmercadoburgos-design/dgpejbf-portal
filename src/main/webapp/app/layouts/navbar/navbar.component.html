@@ -48,6 +48,13 @@
                 {{ item.name }}
               </a>
             </li>
+            <!-- agrego mi nuevo boton para el portal de datos modo grilla-->
+            <li class="nav-item" routerLinkActive="active" *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
+              <a class="nav-link" routerLink="/pej-ra-actual" (click)="collapseNavbar()">
+                <span class="fa fa-table"></span>
+                <span>Grilla Portal de Datos</span>
+              </a>
+            </li>
           </ul>
         </li>
         <li

@@ -21,6 +21,9 @@ logging:
     dgpejbf.portal: DEBUG
 
 spring:
+  config:
+    activate:
+      on-profile: dev #activate 'dev' profile
   devtools:
     restart:
       enabled: true
@@ -31,16 +34,30 @@ spring:
     serialization:
       indent-output: true
   datasource:
+    # Datasource primaria para escritura
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://10.1.90.241:5433/BDtest
     username: postgres
     password: centos2021
-    jpa:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      auto-commit: false
+      pool-name: Hikari
+
+    # Datasource secundaria para lectura
+  secundaria:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://10.1.90.241:5433/sistemas_integrados
+    username: postgres
+    password: centos2021
+    hikari:
+      auto-commit: false
+      pool-name: Hikari2
+
+  jpa:
     hibernate:
       ddl-auto: none
-    hikari:
-      poolName: Hikari
-      auto-commit: false
   liquibase:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker

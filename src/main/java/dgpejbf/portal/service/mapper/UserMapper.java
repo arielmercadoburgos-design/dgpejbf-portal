@@ -2,8 +2,8 @@ package dgpejbf.portal.service.mapper;
 
 import dgpejbf.portal.domain.Authority;
 import dgpejbf.portal.domain.User;
-import dgpejbf.portal.service.dto.AdminUserDTO;
 import dgpejbf.portal.service.dto.UserDTO;
+import dgpejbf.portal.service.dto.secundaria.AdminUserDTO;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.mapstruct.BeanMapping;
