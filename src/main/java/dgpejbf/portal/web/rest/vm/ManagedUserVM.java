@@ -1,6 +1,6 @@
 package dgpejbf.portal.web.rest.vm;
 
-import dgpejbf.portal.service.dto.AdminUserDTO;
+import dgpejbf.portal.service.dto.secundaria.AdminUserDTO;
 import jakarta.validation.constraints.Size;
 
 /**
