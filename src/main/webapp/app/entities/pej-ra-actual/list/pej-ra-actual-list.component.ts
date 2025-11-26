@@ -1,98 +1,127 @@
 import { Component, OnInit } from '@angular/core';
-import { PejRaActualService, IPejRaActual } from '../list/pej-ra-actual.service';
+import { PejRaActualService, IPejRaActual, IPage } from '../list/pej-ra-actual.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
+import { ChangeDetectionStrategy, signal } from '@angular/core';
 
 @Component({
   selector: 'jhi-pej-ra-actual-list',
-  templateUrl: '../list/pej-ra-actual-list.component.html',
+  templateUrl: './pej-ra-actual-list.component.html',
   standalone: true,
   imports: [CommonModule, DatePipe, FormsModule],
+  changeDetection: ChangeDetectionStrategy.OnPush, // Recomendado para Angular moderno
 })
 export class PejRaActualListComponent implements OnInit {
+  // Variables de Estado
   Math = Math;
-  totalItems = 0;
-  page = 0;
+  busqueda = '';
+  // Usamos signals para los datos para mejor rendimiento y reactividad
+  itemsFiltrados = signal<IPejRaActual[]>([]);
+
+  loading = signal(false);
+  totalItems = signal(0);
+
+  // Variables de Paginación y Carga
+  page = 0; // Página actual
   size = 10;
   sort = ['tablaId,desc'];
-  items: IPejRaActual[] = [];
-  loading = false;
-  busqueda = '';
 
-  constructor(private service: PejRaActualService) {}
+  hasMore = signal(false); // NEW: Bandera para saber si hay más páginas para cargar
+
+  filtroRuc = '';
+  filtroRazon = '';
+
+  constructor(private pejRaActualService: PejRaActualService) {}
 
   ngOnInit(): void {
-    this.loadPage(0);
+    this.load(true); // Carga inicial
   }
 
-  loadPage(page: number): void {
-    if (page < 0) return;
+  /**
+   * Cargar con o sin filtros. Implementa el patrón "Cargar Más".
+   * @param isNewSearch Indica si es una nueva búsqueda (resetear lista) o una carga adicional.
+   */
+  load(isNewSearch: boolean): void {
+    if (!isNewSearch && this.loading()) {
+      return; // No cargar si ya está cargando
+    }
 
-    this.loading = true;
-    this.page = page;
+    if (!isNewSearch && !this.hasMore()) {
+      console.warn('No hay más páginas para cargar.');
+      return; // Detener la paginación si no hay más
+    }
 
-    const req = {
+    this.loading.set(true);
+
+    // Si es una nueva búsqueda, reiniciamos la página a 0
+    if (isNewSearch) {
+      this.page = 0;
+    }
+
+    const params: any = {
       page: this.page,
       size: this.size,
       sort: this.sort,
     };
 
-    this.service.query(req).subscribe((res: HttpResponse<IPejRaActual[]>) => {
-      this.loading = false;
-
-      this.items = res.body ?? [];
-
-      const totalCountHeader = res.headers.get('X-Total-Count');
-      this.totalItems = totalCountHeader ? Number(totalCountHeader) : this.items.length;
-
-      console.warn('Página actual:', this.page + 1);
-      console.warn('Items en página:', this.items.length);
-      console.warn('Total Items:', this.totalItems);
-    });
-  }
-  // En PejRaActualListComponent.ts
-
-  // ... (resto de variables)
-
-  get pageNumbers(): number[] {
-    const totalPages = Math.ceil(this.totalItems / this.size);
-    const currentPage = this.page;
-    const maxPagesToShow = 9; // Puedes ajustar este número
-    let startPage: number, endPage: number;
-
-    if (totalPages <= maxPagesToShow) {
-      // Mostrar todas las páginas
-      startPage = 0;
-      endPage = totalPages;
-    } else {
-      // Calcular inicio y fin para mostrar el máximo de páginas
-      const maxPagesBeforeCurrentPage = Math.floor(maxPagesToShow / 2);
-      const maxPagesAfterCurrentPage = Math.ceil(maxPagesToShow / 2) - 1;
-
-      if (currentPage <= maxPagesBeforeCurrentPage) {
-        // Cerca del inicio
-        startPage = 0;
-        endPage = maxPagesToShow;
-      } else if (currentPage + maxPagesAfterCurrentPage >= totalPages) {
-        // Cerca del final
-        startPage = totalPages - maxPagesToShow;
-        endPage = totalPages;
+    // Lógica de Filtrado
+    if (this.busqueda.trim() !== '') {
+      // Detectar si es un número => ruc, si no => razonSocial
+      if (!isNaN(Number(this.busqueda.trim()))) {
+        params.ruc = this.busqueda.trim();
       } else {
-        // En el medio
-        startPage = currentPage - maxPagesBeforeCurrentPage;
-        endPage = currentPage + maxPagesAfterCurrentPage;
+        params.razonSocial = this.busqueda.trim();
       }
     }
 
-    // Asegurar que startPage no sea negativo
-    startPage = Math.max(startPage, 0);
+    this.pejRaActualService.buscar(params).subscribe({
+      next: (res: HttpResponse<IPage<IPejRaActual>>) => {
+        this.loading.set(false);
+        const body = res.body;
 
-    // Crear el array de números de página
-    const pages = [];
-    for (let i = startPage; i < endPage; i++) {
-      pages.push(i);
-    }
-    return pages;
+        if (body?.content) {
+          // *** CORRECCIÓN CLAVE: ANEXAR EN LUGAR DE REEMPLAZAR ***
+          if (isNewSearch) {
+            this.itemsFiltrados.set(body.content);
+          } else {
+            // Añade los nuevos items al final de la lista existente
+            this.itemsFiltrados.update(items => [...items, ...body.content]);
+          }
+        } else if (isNewSearch) {
+          // Si no hay contenido en la primera búsqueda, la lista queda vacía
+          this.itemsFiltrados.set([]);
+        }
+
+        this.totalItems.set(body?.totalElements ?? 0);
+
+        // CORRECCIÓN CLAVE PARA DETENER LA PAGINACIÓN
+        // Si la página actual del backend es menor que (total de páginas - 1)
+        // significa que hay más páginas disponibles.
+        const totalPages = body?.totalPages ?? 0;
+        this.hasMore.set(this.page < totalPages - 1);
+
+        // Si la carga fue exitosa y hay más páginas, preparamos la siguiente página
+        if (this.hasMore()) {
+          this.page++;
+        }
+      },
+      error: err => {
+        console.error('Error al cargar datos:', err);
+        this.loading.set(false);
+        // En caso de error, aseguramos que la paginación se detenga temporalmente
+        this.hasMore.set(false);
+      },
+    });
+  }
+
+  buscar(): void {
+    // Si la búsqueda cambia, siempre iniciamos la carga en la página 0 y reiniciamos la lista.
+    this.load(true);
+  }
+
+  // Nuevo método para cargar la siguiente página
+  loadNextPage(): void {
+    this.load(false);
   }
 }
