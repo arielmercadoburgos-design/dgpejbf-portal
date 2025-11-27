@@ -1,6 +1,7 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { createRequestOption } from 'app/core/request/request-util';
 
 // Interfaz para un registro individual
 export interface IPejRaActual {
@@ -30,32 +31,31 @@ export class PejRaActualService {
   constructor(private http: HttpClient) {}
 
   /** Traer todos sin filtros */
-  query(): Observable<HttpResponse<IPage<IPejRaActual>>> {
-    return this.http.get<IPage<IPejRaActual>>(this.resourceUrl, { observe: 'response' });
+  buscar(req?: any): Observable<HttpResponse<IPage<IPejRaActual>>> {
+    const options = createRequestOption(req);
+    return this.http.get<IPage<IPejRaActual>>(`${this.resourceUrl}/buscar`, { params: options, observe: 'response' });
   }
-
-  /** Traer con filtros y paginación */
-  buscar(filtros?: {
-    ruc?: string | number;
-    razonSocial?: string;
-    page?: number;
-    size?: number;
-    sort?: string[];
-  }): Observable<HttpResponse<IPage<IPejRaActual>>> {
+  /** Exportar todos los registros (sin paginación) */
+  exportAll(req?: any): Observable<IPejRaActual[]> {
+    // Construimos los parámetros manualmente para evitar el error de createRequestOption
     let params = new HttpParams();
 
-    if (filtros) {
-      Object.keys(filtros).forEach(key => {
-        const value = filtros[key as keyof typeof filtros];
-        if (value !== undefined) {
+    if (req) {
+      // Aseguramos traer todo asignando un tamaño grande si no viene definido
+      if (!req.size) {
+        params = params.set('size', '999999');
+      }
+
+      Object.keys(req).forEach(key => {
+        const value = req[key];
+        if (value !== undefined && value !== null) {
           params = params.set(key, value.toString());
         }
       });
     }
 
-    return this.http.get<IPage<IPejRaActual>>(`${this.resourceUrl}/buscar`, {
-      params,
-      observe: 'response',
-    });
+    // IMPORTANTE: Asegúrate de que tu backend tenga el endpoint '/export'
+    // Si no tienes un endpoint específico '/export', usa solo this.resourceUrl
+    return this.http.get<IPejRaActual[]>(`${this.resourceUrl}/export`, { params });
   }
 }

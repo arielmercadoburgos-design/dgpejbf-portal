@@ -3,7 +3,10 @@ import { PejRaActualService, IPejRaActual, IPage } from '../list/pej-ra-actual.s
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpResponse } from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, signal } from '@angular/core';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'jhi-pej-ra-actual-list',
@@ -106,10 +109,9 @@ export class PejRaActualListComponent implements OnInit {
           this.page++;
         }
       },
-      error: err => {
+      error: (err: HttpErrorResponse) => {
         console.error('Error al cargar datos:', err);
         this.loading.set(false);
-        // En caso de error, aseguramos que la paginación se detenga temporalmente
         this.hasMore.set(false);
       },
     });
@@ -123,5 +125,38 @@ export class PejRaActualListComponent implements OnInit {
   // Nuevo método para cargar la siguiente página
   loadNextPage(): void {
     this.load(false);
+  }
+  exportToExcel(): void {
+    const data = this.itemsFiltrados(); // ✅ Tomamos directamente del signal
+
+    if (data.length === 0) {
+      console.warn('No hay datos para exportar');
+      return;
+    }
+
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = {
+      Sheets: { Datos: worksheet },
+      SheetNames: ['Datos'],
+    };
+
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, 'PejRaActual.xlsx');
+  }
+  exportToExcelAll(): void {
+    this.pejRaActualService.exportAll().subscribe(data => {
+      const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+      const workbook: XLSX.WorkBook = {
+        Sheets: { Datos: worksheet },
+        SheetNames: ['Datos'],
+      };
+
+      const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+      const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+      saveAs(blob, 'PejRaActual_TODO.xlsx');
+    });
   }
 }

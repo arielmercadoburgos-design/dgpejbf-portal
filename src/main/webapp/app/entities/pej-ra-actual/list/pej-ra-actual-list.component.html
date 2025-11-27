@@ -4,7 +4,14 @@
     <!-- BARRA DE BÚSQUEDA Y BOTÓN -->
     <div class="input-group mb-3 flex flex-col sm:flex-row gap-2">
       <!-- (ngModelChange)="loadPage(0)" ELIMINADO: Ya no usamos paginación tradicional -->
-      <input type="text" class="form-control" placeholder="Buscar por RUC o razón social" [(ngModel)]="busqueda" (keyup.enter)="buscar()" />
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Buscar por RUC o razón social"
+        [(ngModel)]="busqueda"
+        (keyup.enter)="buscar()"
+        name="searchQuery"
+      />
       <button class="btn btn-primary" (click)="buscar()" [disabled]="loading()">
         <span *ngIf="!loading()">Buscar</span>
         <span *ngIf="loading()"> <i class="spinner-border spinner-border-sm me-1"></i> Cargando... </span>
@@ -49,6 +56,9 @@
     <div *ngIf="totalItems() > 0" class="text-muted text-sm my-3">
       Mostrando {{ itemsFiltrados().length }} de {{ totalItems() }} resultados.
     </div>
+    <!-- BOTONES DE EXPORTACIÓN A EXCEL -->
+    <button class="btn btn-success mb-3" (click)="exportToExcel()"><i class="fa fa-file-excel"></i> Exportar a Excel Pagina actual</button>
+    <button class="btn btn-success mb-3" (click)="exportToExcelAll()">Exportar a excel TODO</button>
 
     <!-- BOTÓN "CARGAR MÁS" (PAGINACIÓN CONTINUA) -->
     <!-- Usamos signals hasMore() y loading() y llamamos a loadNextPage() -->
