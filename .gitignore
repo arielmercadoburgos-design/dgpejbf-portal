@@ -151,3 +151,9 @@ Desktop.ini
 ######################
 coverage/
 .nyc_output/
+
+# Clave AES de cifrado
+/src/main/webapp/environments/environment.development.ts
+# Claves JWT de Metabase o AES si las dejaste aquí para desarrollo local
+/src/main/resources/config/application-dev.yml
+/src/main/resources/config/application.yml

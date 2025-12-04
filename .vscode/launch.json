@@ -1,0 +1,33 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Current File",
+      "request": "launch",
+      "mainClass": "${file}"
+    },
+    {
+      "type": "java",
+      "name": "MonolitoApp",
+      "request": "launch",
+      "mainClass": "dgpejbf.portal.MonolitoApp",
+      "projectName": "monolito"
+    },
+    {
+      "type": "java",
+      "name": "AESKeyGenerator",
+      "request": "launch",
+      "mainClass": "dgpejbf.portal.service.metabase.AESKeyGenerator",
+      "projectName": "monolito",
+      "env": {
+        "CIFRADO_CLAVE": "mCtfkREdT2yoWttRiHbMm3oKuCU6BEaRFkZkyUZFbz8=",
+        "METABASE_JWT_SECRET": "20c9b2a410e0c08e87a8fd1ecf61edf9811ecd38e76734e5764e753505c82ee3"
+      },
+      "args": ""
+    }
+  ]
+}
