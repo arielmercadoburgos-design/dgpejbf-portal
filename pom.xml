@@ -85,6 +85,16 @@
             <version>${jhipster-framework.version}</version>
         </dependency>
         <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>com.auth0</groupId>
+            <artifactId>java-jwt</artifactId>
+            <version>4.4.0</version>                    
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <scope>provided</scope>
@@ -274,6 +284,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.testcontainers</groupId>
@@ -809,7 +820,7 @@
                             <groupId>org.springframework.boot</groupId>
                             <artifactId>spring-boot-starter-data-jpa</artifactId>
                             <version>${spring-boot.version}</version>
-                        </dependency>
+                        </dependency>                        
                     </dependencies>
                 </plugin>
                 <plugin>
@@ -846,8 +857,9 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-devtools</artifactId>
                     <optional>true</optional>
-                </dependency>
-            </dependencies>
+                </dependency>            
+                
+            </dependencies>    
         </profile>
         <profile>
             <id>docker-compose</id>
@@ -859,7 +871,7 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-docker-compose</artifactId>
                     <optional>true</optional>
-                </dependency>
+                </dependency>                
             </dependencies>
         </profile>
         <profile>
@@ -876,6 +888,7 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-undertow</artifactId>
                 </dependency>
+                
             </dependencies>
             <build>
                 <pluginManagement>

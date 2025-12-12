@@ -45,7 +45,11 @@ const routes: Routes = [
     loadComponent: () => import('./entities/dashboard/dashboard.component').then(m => m.DashboardComponent),
     title: 'Portal de datos',
   },
-  // 📁 Portal ruta publica (home sin accesos de usuarios)
+  // 📁 Grilla portal de datos
+  {
+    path: 'pej-ra-actual',
+    loadComponent: () => import('./entities/pej-ra-actual/list/pej-ra-actual-list.component').then(m => m.PejRaActualListComponent),
+  },
   {
     path: 'public',
     component: HomeComponent,

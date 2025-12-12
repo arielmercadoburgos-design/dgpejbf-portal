@@ -6,7 +6,7 @@ import dgpejbf.portal.repository.UserRepository;
 import dgpejbf.portal.security.AuthoritiesConstants;
 import dgpejbf.portal.service.MailService;
 import dgpejbf.portal.service.UserService;
-import dgpejbf.portal.service.dto.AdminUserDTO;
+import dgpejbf.portal.service.dto.secundaria.AdminUserDTO;
 import dgpejbf.portal.web.rest.errors.BadRequestAlertException;
 import dgpejbf.portal.web.rest.errors.EmailAlreadyUsedException;
 import dgpejbf.portal.web.rest.errors.LoginAlreadyUsedException;

@@ -1,4 +1,4 @@
-package dgpejbf.portal.service.dto;
+package dgpejbf.portal.service.dto.secundaria;
 
 import dgpejbf.portal.config.Constants;
 import dgpejbf.portal.domain.Authority;
