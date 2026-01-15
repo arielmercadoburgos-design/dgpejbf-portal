@@ -24,15 +24,17 @@ public class PejRaActualResource {
     public Page<PejRaActualDTO> buscar(
         @RequestParam(required = false) String ruc,
         @RequestParam(required = false) String razonSocial,
+        @RequestParam(required = false) String tipo,
         Pageable pageable
     ) {
-        return service.buscar(ruc, razonSocial, pageable);
+        return service.buscar(ruc, razonSocial, tipo, pageable);
     }
     @GetMapping("/export")
     public List<PejRaActualDTO> exportAll(
         @RequestParam(required = false) String ruc,
-        @RequestParam(required = false) String razonSocial
-) {
+        @RequestParam(required = false) String razonSocial,
+        @RequestParam(required = false) String tipo
+        ) {
     Integer rucAsInteger = null;
         if (ruc != null && !ruc.isEmpty()) {
             try {
@@ -42,6 +44,6 @@ public class PejRaActualResource {
                 // Si la conversión falla (por ejemplo, "?ruc=texto"), rucAsInteger queda en null.
             }
         }
-    return service.exportAll(razonSocial, rucAsInteger); 
+    return service.exportAll(razonSocial, tipo, rucAsInteger); 
 }
 }
