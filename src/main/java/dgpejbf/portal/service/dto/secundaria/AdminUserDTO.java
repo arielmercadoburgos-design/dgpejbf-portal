@@ -4,7 +4,6 @@ import dgpejbf.portal.config.Constants;
 import dgpejbf.portal.domain.Authority;
 import dgpejbf.portal.domain.User;
 import jakarta.validation.constraints.*;
-import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
@@ -54,6 +53,8 @@ public class AdminUserDTO implements Serializable {
     private Instant lastModifiedDate;
 
     private Set<String> authorities;
+
+    private String nroCedula;
 
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
@@ -186,6 +187,14 @@ public class AdminUserDTO implements Serializable {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public String getNroCedula() {
+        return nroCedula;
+    }
+
+    public void setNroCedula(String nroCedula) {
+        this.nroCedula = nroCedula;
     }
 
     // prettier-ignore

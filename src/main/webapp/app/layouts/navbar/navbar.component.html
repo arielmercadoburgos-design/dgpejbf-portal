@@ -4,6 +4,7 @@
       <span class="logo-img"></span>
       <span class="navbar-version">{{ version }}</span>
     </a>
+
     <a
       class="navbar-toggler d-lg-none"
       href="javascript:void(0);"
@@ -16,6 +17,7 @@
     >
       <fa-icon icon="bars"></fa-icon>
     </a>
+
     <div class="navbar-collapse collapse" id="navbarResponsive" [ngbCollapse]="isNavbarCollapsed()">
       <ul class="navbar-nav ms-auto">
         <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
@@ -40,23 +42,42 @@
             <fa-icon icon="th-list"></fa-icon>
             <span>Menú</span>
           </a>
+
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-            <!-- inserto mi boton Portal de datos -->
+            <!-- items dinámicos -->
             <li *ngFor="let item of entitiesNavbarItems">
               <a [routerLink]="item.route" class="dropdown-item" (click)="collapseNavbar()">
-                <fa-icon icon="chart-bar" [fixedWidth]="true" class="text-scondary"></fa-icon>
+                <fa-icon icon="chart-bar" [fixedWidth]="true" class="text-secondary"></fa-icon>
                 {{ item.name }}
               </a>
             </li>
-            <!-- agrego mi nuevo boton para el portal de datos modo grilla-->
+
+            <!-- Tu botón: Grilla Portal de Datos -->
             <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
               <a class="dropdown-item" routerLink="/pej-ra-actual" (click)="collapseNavbar()">
                 <fa-icon icon="table" [fixedWidth]="true"></fa-icon>
                 <span>Grilla Portal de Datos</span>
               </a>
             </li>
+
+            <!-- De main: User Extra -->
+            <li>
+              <a
+                class="dropdown-item"
+                routerLink="/user-extra"
+                routerLinkActive="active"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="collapseNavbar()"
+              >
+                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                <span jhiTranslate="global.menu.entities.userExtra">User Extra</span>
+              </a>
+            </li>
+
+            <!-- jhipster-needle-add-entity-to-menu -->
           </ul>
         </li>
+
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown
@@ -71,6 +92,7 @@
               <span jhiTranslate="global.menu.admin.main">Administración</span>
             </span>
           </a>
+
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="admin-menu">
             <li>
               <a
@@ -125,6 +147,7 @@
             }
           </ul>
         </li>
+
         @if (languages && languages.length > 1) {
           <li ngbDropdown class="nav-item dropdown pointer" display="dynamic">
             <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="languagesnavBarDropdown">
@@ -148,6 +171,7 @@
             </ul>
           </li>
         }
+
         <li
           ngbDropdown
           class="nav-item dropdown pointer"
@@ -168,6 +192,7 @@
               </span>
             }
           </a>
+
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
             @if (accountRef !== null) {
               <li>

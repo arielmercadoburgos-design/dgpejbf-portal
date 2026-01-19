@@ -16,7 +16,6 @@ import entitiesNavbarItem from './navbar-item.model';
 import { CommonModule } from '@angular/common';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import NavbarItem from './navbar-item.model';
-
 // Definición de la interfaz para el nuevo elemento del menú
 export interface DashboardNavbarItem extends NavbarItem {
   route: string;

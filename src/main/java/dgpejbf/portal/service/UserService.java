@@ -3,7 +3,9 @@ package dgpejbf.portal.service;
 import dgpejbf.portal.config.Constants;
 import dgpejbf.portal.domain.Authority;
 import dgpejbf.portal.domain.User;
+import dgpejbf.portal.domain.UserExtra;
 import dgpejbf.portal.repository.AuthorityRepository;
+import dgpejbf.portal.repository.UserExtraRepository;
 import dgpejbf.portal.repository.UserRepository;
 import dgpejbf.portal.security.AuthoritiesConstants;
 import dgpejbf.portal.security.SecurityUtils;
@@ -36,6 +38,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final UserExtraRepository userExtraRepository;
+
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
@@ -44,11 +48,13 @@ public class UserService {
 
     public UserService(
         UserRepository userRepository,
+        UserExtraRepository userExtraRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
         CacheManager cacheManager
     ) {
         this.userRepository = userRepository;
+        this.userExtraRepository = userExtraRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
@@ -182,8 +188,23 @@ public class UserService {
         }
         // Establece la fecha de expiración por defecto (31/12 del año actual)
         user.setFechaExpiracion(LocalDate.of(LocalDate.now().getYear(), 12, 31));
-        userRepository.save(user);
+        // 1. Guardar el usuario principal
+        userRepository.save(user); // <-- ¡El ID de 'user' se genera aquí
         this.clearUserCaches(user);
+
+        // 2. Lógica para crear y vincular UserExtra
+        UserExtra userExtra = new UserExtra();
+
+        // La clave: establecer la relación One-to-One
+        userExtra.setOnetoone(user);
+        userExtra.setNro_cedula(userDTO.getNroCedula());
+
+        // (Opcional) Puedes inicializar cualquier campo adicional aquí:
+        // userExtra.setTelefono("N/A");
+
+        // 3. Guardar la entidad de extensión
+        userExtraRepository.save(userExtra);
+
         LOG.debug("Created Information for User: {}", user);
         return user;
     }
