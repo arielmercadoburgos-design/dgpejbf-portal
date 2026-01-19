@@ -5,14 +5,15 @@ import { HttpResponse, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, signal } from '@angular/core';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PejRaActualService, IPejRaActual, IPage } from '../list/pej-ra-actual.service';
+import SharedModule from 'app/shared/shared.module';
 
 @Component({
   selector: 'jhi-pej-ra-actual-list',
   templateUrl: './pej-ra-actual-list.component.html',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule],
+  imports: [CommonModule, DatePipe, FormsModule, FontAwesomeModule, SharedModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PejRaActualListComponent implements OnInit {
@@ -130,6 +131,28 @@ export class PejRaActualListComponent implements OnInit {
         if (data.length > 0) {
           this.exportDataToExcelFile(data, 'PejRaActual_Completo.xlsx');
         }
+      },
+    });
+  }
+  exportarCSV(): void {
+    const valor = this.busqueda.trim();
+    const filtros: any = {};
+    if (valor !== '') {
+      if (!isNaN(Number(valor))) {
+        filtros['ruc'] = valor;
+      } else {
+        filtros['razonSocial'] = valor;
+        filtros['tipo'] = valor;
+      }
+    }
+    this.pejRaActualService.exportToCsv(filtros).subscribe({
+      // Sintaxis corregida (Method Shorthand)
+      next(blob: Blob) {
+        const fileName = `reporte_${new Date().getTime()}.csv`;
+        saveAs(blob, fileName);
+      },
+      error(error) {
+        console.error('Error al exportar CSV', error);
       },
     });
   }

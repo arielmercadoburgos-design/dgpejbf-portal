@@ -1,8 +1,10 @@
 <div class="card shadow-lg border-0 rounded-3 m-4">
   <div class="card-header bg-primary text-white p-3">
-    <h5 class="mb-0">Registro Actual</h5>
+    <h4 class="mb-0">Registros Administrativos de Personas y Estructuras Jurídicas</h4>
+    <br />
     <div class="btn-group shadow-sm">
       <button class="btn btn-sm btn-success" (click)="exportToExcelAll()">Exportar .xls</button>
+      <button class="btn btn-sm btn-success" (click)="exportarCSV()">Exportar .csv</button>
     </div>
   </div>
 
@@ -51,7 +53,7 @@
             <td class="text-muted">{{ item.dv }}</td>
             <td>{{ item.razonSocial }}</td>
             <td>
-              <span class="badge bg-info-subtle text-info-emphasis">{{ item.tipo }}</span>
+              <span class="badge bg-transparent text-info-emphasis">{{ item.tipo }}</span>
             </td>
             <td>{{ item.tramiteId }}</td>
             <td>{{ item.tipoComunicacion }}</td>

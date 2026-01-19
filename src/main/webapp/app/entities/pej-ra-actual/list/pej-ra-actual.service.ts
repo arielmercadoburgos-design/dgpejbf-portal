@@ -53,9 +53,13 @@ export class PejRaActualService {
         }
       });
     }
-
-    // IMPORTANTE: Asegúrate de que tu backend tenga el endpoint '/export'
-    // Si no tienes un endpoint específico '/export', usa solo this.resourceUrl
     return this.http.get<IPejRaActual[]>(`${this.resourceUrl}/export`, { params });
+  }
+  exportToCsv(req?: any): Observable<Blob> {
+    const options = createRequestOption(req); // Asegúrate de que esta función esté importada
+    return this.http.get(`${this.resourceUrl}/export-csv`, {
+      params: options,
+      responseType: 'blob',
+    });
   }
 }
