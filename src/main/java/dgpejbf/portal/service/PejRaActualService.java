@@ -11,10 +11,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
+import dgpejbf.portal.service.dto.secundaria.PejRaActualDirectivoDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 @Service
 public class PejRaActualService {
 
+    private static final Logger log = LoggerFactory.getLogger(PejRaActualService.class);
     
     private final PejRaActualRepository repository;
     private final PejRaActualMapper mapper;
@@ -22,9 +25,21 @@ public class PejRaActualService {
     public PejRaActualService(PejRaActualRepository repository, PejRaActualMapper mapper) {
         this.repository = repository;
         this.mapper = mapper;
-        
     }
 
+    /**
+     * Obtener los directivos asociados a un RUC.
+     * @param ruc El RUC de la empresa.
+     * @return Lista de directivos.
+     */
+    public List<PejRaActualDirectivoDTO> findDirectivosByRuc(Integer ruc) {
+        // Opción A: Si tienes PejRaActualDirectivoRepository
+        // return directivoRepository.findByRuc(ruc).stream().map(directivoMapper::toDto).toList();
+        
+        // Opción B: Simulación para probar la conexión
+        log.debug("Buscando directivos para el RUC: {}", ruc);
+        return new ArrayList<>(); // Aquí irá tu lógica de base de datos
+    }
     /**
      * Helper para crear la Specification para los filtros.
      * La firma es (String razonSocial, String tipo, Integer ruc)

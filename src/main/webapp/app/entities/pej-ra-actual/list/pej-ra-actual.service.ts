@@ -24,6 +24,13 @@ export interface IPage<T> {
   totalPages: number;
 }
 
+export interface IDirectivo {
+  nombre?: string;
+  apellido?: string;
+  nacionalidad?: string;
+  fecha_comunicacion?: Date;
+  // Añade aquí más campos si existen en portal_dgpejbf.pej_ra_actual_directivo
+}
 @Injectable({ providedIn: 'root' })
 export class PejRaActualService {
   private resourceUrl = 'api/pej-ra-actual';
@@ -61,5 +68,8 @@ export class PejRaActualService {
       params: options,
       responseType: 'blob',
     });
+  }
+  getDirectivos(ruc: string): Observable<IDirectivo[]> {
+    return this.http.get<IDirectivo[]>(`${this.resourceUrl}/directivos/${ruc}`);
   }
 }
