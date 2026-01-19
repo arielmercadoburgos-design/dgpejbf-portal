@@ -1,38 +1,29 @@
-<footer class="footer mt-auto py-4 bg-light border-top text-center">
-  <div class="container">
-    <!-- Contacto -->
-    <div class="row justify-content-center mb-3 mt-3 g-3">
-      <!-- Dirección -->
-      <div class="col-12 col-md-5">
-        <div class="contact-card shadow-sm p-3 rounded bg-white h-100">
-          <div class="d-flex align-items-center mb-2">
-            <i class="bi bi-geo-alt-fill me-2 text-icon"></i>
-            <h6 class="mb-0 fw-bold">Dirección</h6>
-          </div>
-          <hr class="my-2" />
-          <p class="mb-0 small text-muted">
-            Caballero N° 860 entre Manuel Domínguez y Fulgencio R. Moreno <br />
-            Asunción, Paraguay
-          </p>
-        </div>
+<footer class="gov-footer">
+  <div class="gov-footer-inner">
+    <!-- Dirección -->
+    <div class="footer-block">
+      <div class="footer-title">
+        <i class="bi bi-geo-alt-fill"></i>
+        Dirección
       </div>
-
-      <!-- Correo -->
-      <div class="col-12 col-md-5">
-        <div class="contact-card shadow-sm p-3 rounded bg-white h-100">
-          <div class="d-flex align-items-center mb-2">
-            <i class="bi bi-envelope-fill me-2 text-icon"></i>
-            <h6 class="mb-0 fw-bold">Correo electrónico</h6>
-          </div>
-          <hr class="my-2" />
-          <a href="mailto:atencion_sociedades&#64;mef.gov.py"> atencion_sociedades&#64;mef.gov.py </a>
-        </div>
+      <div class="footer-text">
+        Caballero N° 860 entre Manuel Domínguez y Fulgencio R. Moreno<br />
+        Asunción, Paraguay
       </div>
     </div>
 
-    <!-- Línea inferior -->
-    <div class="footer-bottom mt-3 pt-2 border-top">
-      <p class="mb-0 small text-muted">© {{ currentYear }} Ministerio de Economía y Finanzas | Portal DGPEJBF</p>
+    <!-- Correo -->
+    <div class="footer-block">
+      <div class="footer-title">
+        <i class="bi bi-envelope-fill"></i>
+        Correo electrónico
+      </div>
+      <div class="footer-text">
+        <a href="mailto:atencion_sociedades&#64;mef.gov.py"> atencion_sociedades&#64;mef.gov.py </a>
+      </div>
     </div>
   </div>
+
+  <!-- Línea inferior -->
+  <div class="gov-footer-bottom">© {{ currentYear }} Ministerio de Economía y Finanzas | Portal DGPEJBF</div>
 </footer>

@@ -1,6 +1,6 @@
-<nav data-cy="navbar" class="navbar navbar-light navbar-expand-md bg-light">
+<nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md gov-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
+    <a class="navbar-brand logo d-none" routerLink="/" (click)="collapseNavbar()">
       <span class="logo-img"></span>
       <span class="navbar-version">{{ version }}</span>
     </a>
@@ -49,9 +49,9 @@
               </a>
             </li>
             <!-- agrego mi nuevo boton para el portal de datos modo grilla-->
-            <li class="nav-item" routerLinkActive="active" *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
-              <a class="nav-link" routerLink="/pej-ra-actual" (click)="collapseNavbar()">
-                <span class="fa fa-table"></span>
+            <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
+              <a class="dropdown-item" routerLink="/pej-ra-actual" (click)="collapseNavbar()">
+                <fa-icon icon="table" [fixedWidth]="true"></fa-icon>
                 <span>Grilla Portal de Datos</span>
               </a>
             </li>

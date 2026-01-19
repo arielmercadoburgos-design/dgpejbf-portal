@@ -1,71 +1,318 @@
-/* === Tipografías: cuerpo liviano + encabezados fuertes === */
-body {
-  font-weight: 300;
+/* =====================================================
+   Portal DGPEJBF (MEF)
+   ===================================================== */
+
+/* =========================
+   VARIABLES INSTITUCIONALES
+   ========================= */
+:root {
+  --mef-blue: #003366;
 }
+
+/* =========================
+   BASE
+   ========================= */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-weight: 300;
+  background: #f4f6f8;
+  color: #3d3c3b;
+}
+
 h1,
 h2,
 h3,
 h4 {
   font-weight: 600;
+  color: var(--mef-blue);
 }
 
-/* === Navbar unificada === */
-.navbar {
-  background-color: #ffffff !important;
-  border-bottom: 1px solid #e6e8eb;
-
-  .navbar-brand,
-  .nav-link {
-    color: #3d3c3b !important;
-  }
-
-  .nav-link:hover {
-    color: #487aa1 !important;
-  }
-
-  ul.navbar-nav .nav-item {
-    margin-left: 0.5em;
-  }
-}
-
-/* === Suavizado + logos === */
 html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.navbar-brand img {
+/* Sticky layout: footer abajo sin huecos */
+app-root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* =========================
+   HEADER GOV (incluye navbar)
+   ========================= */
+.gov-header {
+  background: var(--mef-blue);
+  padding: 0;
+}
+
+.gov-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  gap: 16px;
+}
+
+.gov-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.gov-header-left img {
+  height: 42px;
   display: block;
-  transition: transform 0.2s ease-in-out;
 }
 
-.navbar-brand:hover img {
-  transform: scale(1.02); /* ligero aumento, sutil y elegante */
+.gov-header-left h2 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  white-space: nowrap;
 }
 
-/* === LOGO INSTITUCIONAL: eliminar línea al pasar el mouse === */
-.navbar-brand,
-.navbar-brand img,
-.navbar-brand:hover,
-.navbar-brand:focus,
-.navbar-brand:active {
-  text-decoration: none !important;
-  border: none !important;
-  outline: none !important;
+/* Navbar dentro del header */
+.gov-header .navbar {
+  background: transparent !important;
+  border: 0 !important;
   box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
-/* Si el logo está dentro de un <a> */
-.navbar a.navbar-brand:hover img,
-.navbar a.navbar-brand:focus img {
+.gov-header .navbar .navbar-brand,
+.gov-header .navbar .nav-link,
+.gov-header .navbar .dropdown-toggle {
+  color: #ffffff !important;
+}
+
+.gov-header .navbar .nav-link:hover,
+.gov-header .navbar .dropdown-toggle:hover {
+  color: #dbe9ff !important;
+}
+
+.gov-header .navbar .navbar-toggler {
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.gov-header .dropdown-menu {
+  background: #ffffff;
+}
+
+.gov-header .dropdown-menu .dropdown-item {
+  color: var(--mef-blue) !important;
+}
+
+/* =========================
+   CONTENIDO
+   ========================= */
+.main-content {
+  flex: 1;
+  background: #f4f6f8;
+  padding: 2.25rem 1.5rem 1.25rem;
+}
+
+/* Eliminar card/wrapper de JHipster */
+.container-fluid {
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.card.jh-card {
+  background: transparent !important;
   border: none !important;
-  text-decoration: none !important;
   box-shadow: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
-/* Ajuste global para evitar subrayado en imágenes con enlace */
-a img {
-  border: none !important;
-  text-decoration: none !important;
-  outline: none !important;
+/* Quitar separadores */
+hr {
+  display: none !important;
+}
+
+/* =========================
+   TEXTOS JHIPSTER / BOOTSTRAP
+   ========================= */
+.text-primary,
+.text-info {
+  color: var(--mef-blue) !important;
+}
+
+.page-title,
+.page-heading,
+.page-heading span {
+  color: var(--mef-blue);
+  font-weight: 600;
+}
+
+/* =========================
+   HOME
+   ========================= */
+.home-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.home-title {
+  margin: 0 0 1.75rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--mef-blue);
+  font-size: 2.2rem;
+  line-height: 1.15;
+}
+
+/* Panel informativo */
+.info-panel {
+  text-align: left;
+  background: #ffffff;
+  border: 1px solid #e6e8eb;
+  border-left: 4px solid var(--mef-blue);
+  border-radius: 10px;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================
+   TABLAS
+   ========================= */
+table th {
+  background: var(--mef-blue);
+  color: #ffffff;
+  text-align: center;
+}
+
+/* =========================
+   FOOTER GOV
+   ========================= */
+.gov-footer {
+  background: var(--mef-blue);
+  color: #ffffff;
+  padding: 18px 32px 14px;
+  font-size: 0.85rem;
+}
+
+.gov-footer-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 32px;
+}
+
+.footer-block {
+  max-width: 460px;
+}
+
+.footer-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.footer-text {
+  opacity: 0.9;
+  line-height: 1.45;
+}
+
+.gov-footer a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.gov-footer a:hover {
+  text-decoration: underline;
+}
+
+.gov-footer-bottom {
+  max-width: 1200px;
+  margin: 14px auto 0;
+  padding-top: 8px;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.85;
+  border-top: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+/* =========================
+   RESPONSIVE
+   ========================= */
+
+/* Tablets */
+@media (max-width: 992px) {
+  .main-content {
+    padding: 1.75rem 1.25rem 1rem;
+  }
+
+  .home-title {
+    font-size: 1.9rem;
+  }
+
+  .info-panel {
+    padding: 1.5rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .main-content {
+    padding: 1.25rem 1rem 1rem;
+  }
+
+  .home-title {
+    font-size: 1.55rem;
+    line-height: 1.2;
+  }
+
+  .info-panel {
+    padding: 1.25rem 1rem;
+  }
+
+  .gov-footer {
+    padding: 16px;
+  }
+
+  .gov-footer-inner {
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+/* =========================================
+   AJUSTE FINAL – TEXTO + BARRA AZUL OSCURO
+   ========================================= */
+
+:root {
+  --mef-blue: #003366;
+}
+
+/* Texto: ¿Qué datos podemos encontrar? */
+.info-panel h4,
+.info-panel h5,
+.info-panel h6 {
+  color: var(--mef-blue) !important;
+}
+
+/* Si el texto es un link */
+.info-panel a {
+  color: var(--mef-blue) !important;
+  font-weight: 600;
+}
+
+/* Barra izquierda de la card */
+.info-panel {
+  border-left-color: var(--mef-blue) !important;
 }

@@ -40,15 +40,16 @@ const routes: Routes = [
   // 📁 Entidades (tu módulo “Portal”)
   {
     path: 'entities/dashboard',
-    data: { authorities: [Authority.USER] },
+    data: { authorities: [Authority.USER], pageTitle: 'Portal de Datos' },
     canActivate: [UserRouteAccessService],
     loadComponent: () => import('./entities/dashboard/dashboard.component').then(m => m.DashboardComponent),
-    title: 'Portal de datos',
   },
+
   // 📁 Grilla portal de datos
   {
     path: 'pej-ra-actual',
     loadComponent: () => import('./entities/pej-ra-actual/list/pej-ra-actual-list.component').then(m => m.PejRaActualListComponent),
+    data: { pageTitle: 'Grilla Portal de Datos' },
   },
   {
     path: 'public',
