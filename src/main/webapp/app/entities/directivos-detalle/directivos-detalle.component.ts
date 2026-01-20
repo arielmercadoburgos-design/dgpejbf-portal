@@ -27,16 +27,17 @@ import { PejRaActualDirectivoService } from './directivos-detalle-directivo.serv
                   <th>Nombre y Apellido</th>
                   <th>Cargo</th>
                   <th>Documento</th>
-                  <th>Nacionalidad</th>
+                  <th>Fecha de Asunción</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let d of directivos()">
-                  <td class="fw-bold">{{ d.nombre }}</td>
+                  <td class="ps-4 text-dark">{{ d.nombre }}</td>
                   <td>
-                    <span class="badge bg-info-emphasis">{{ d.cargo }}</span>
+                    <span class="text-primary fw-medium">{{ d.cargo }}</span>
                   </td>
-                  <td>{{ d.cedula }}</td>
+                  <td class="text-muted">{{ d.cedula }}</td>
+                  <td class="text-muted">{{ d.fechaAsuncion }}</td>
                 </tr>
               </tbody>
             </table>
