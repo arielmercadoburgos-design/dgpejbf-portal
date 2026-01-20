@@ -1,6 +1,6 @@
-<nav data-cy="navbar" class="navbar navbar-light navbar-expand-md bg-light">
+<nav data-cy="navbar" class="navbar navbar-dark navbar-expand-md gov-navbar">
   <div class="container-fluid">
-    <a class="navbar-brand logo" routerLink="/" (click)="collapseNavbar()">
+    <a class="navbar-brand logo d-none" routerLink="/" (click)="collapseNavbar()">
       <span class="logo-img"></span>
       <span class="navbar-version">{{ version }}</span>
     </a>
@@ -48,19 +48,13 @@
                 {{ item.name }}
               </a>
             </li>
-            <li>
-              <a
-                class="dropdown-item"
-                routerLink="/user-extra"
-                routerLinkActive="active"
-                [routerLinkActiveOptions]="{ exact: true }"
-                (click)="collapseNavbar()"
-              >
-                <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
-                <span jhiTranslate="global.menu.entities.userExtra">User Extra</span>
+            <!-- agrego mi nuevo boton para el portal de datos modo grilla-->
+            <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
+              <a class="dropdown-item" routerLink="/pej-ra-actual" (click)="collapseNavbar()">
+                <fa-icon icon="table" [fixedWidth]="true"></fa-icon>
+                <span>Grilla Portal de Datos</span>
               </a>
             </li>
-            <!-- jhipster-needle-add-entity-to-menu -->
           </ul>
         </li>
         <li
