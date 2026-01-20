@@ -1,4 +1,4 @@
-package dgpejbf.portal.service.dto.secundaria;
+package dgpejbf.portal.service.dto;
 
 import java.time.Instant;
 import java.io.Serializable;

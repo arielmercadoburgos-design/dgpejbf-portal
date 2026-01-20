@@ -13,7 +13,7 @@ export class PejRaActualListComponent {}
     CommonModule,
     RouterModule.forChild([
       {
-        path: 'pej-ra-actual',
+        path: '',
         component: PejRaActualListComponent,
       },
       {

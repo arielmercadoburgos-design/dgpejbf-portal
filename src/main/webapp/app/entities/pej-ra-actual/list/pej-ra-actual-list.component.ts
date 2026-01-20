@@ -8,7 +8,7 @@ import { saveAs } from 'file-saver';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PejRaActualService, IPejRaActual, IPage } from '../list/pej-ra-actual.service';
 import SharedModule from 'app/shared/shared.module';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-pej-ra-actual-list',
@@ -33,6 +33,7 @@ export class PejRaActualListComponent implements OnInit {
   constructor(
     private pejRaActualService: PejRaActualService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
   ngOnInit(): void {

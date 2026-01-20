@@ -1,6 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core'; // Agregamos signal
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { PejRaActualDirectivoService } from './directivos-detalle-directivo.service';
 
 @Component({
   selector: 'jhi-directivos-detalle',
@@ -31,12 +32,11 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
               </thead>
               <tbody>
                 <tr *ngFor="let d of directivos()">
-                  <td class="fw-bold">{{ d.nombre }} {{ d.apellido }}</td>
+                  <td class="fw-bold">{{ d.nombre }}</td>
                   <td>
                     <span class="badge bg-info-emphasis">{{ d.cargo }}</span>
                   </td>
-                  <td>{{ d.nroDocumento }}</td>
-                  <td>{{ d.nacionalidad }}</td>
+                  <td>{{ d.cedula }}</td>
                 </tr>
               </tbody>
             </table>
@@ -57,12 +57,15 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
   `, // <--- Corregido el cierre del template
 })
 export class DirectivosDetalleComponent implements OnInit {
+  standalone = true;
+  imports = [CommonModule, RouterModule];
   ruc: string | null = null;
   directivos = signal<any[]>([]); // Para almacenar los datos de portal_dgpejbf.pej_ra_actual_directivo
   loading = signal(false);
 
   constructor(
     private route: ActivatedRoute,
+    private directivoService: PejRaActualDirectivoService,
     // private service: PejRaActualService // Inyecta tu servicio aquí
   ) {}
 
@@ -76,9 +79,17 @@ export class DirectivosDetalleComponent implements OnInit {
   cargarDirectivos(ruc: string): void {
     this.loading.set(true);
 
-    // Simulación de carga para que veas cómo queda:
-    setTimeout(() => {
-      this.loading.set(false);
-    }, 800);
+    // Aquí llamas a tu servicio para obtener los directivos por RUC
+    this.directivoService.findByRuc(Number(ruc)).subscribe({
+      next: (res: any[]) => {
+        this.directivos.set(res);
+        this.loading.set(false);
+      },
+      error: err => {
+        console.error('Error cargando directivos:', err);
+        this.loading.set(false);
+        this.directivos.set([]); // Limpiar en caso de error
+      },
+    });
   }
 }
