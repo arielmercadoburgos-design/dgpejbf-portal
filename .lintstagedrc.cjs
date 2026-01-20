@@ -1,3 +1,4 @@
 module.exports = {
-  '{,**/}*.{md,json,yml,js,cjs,mjs,ts,cts,mts,java,html,css,scss}': ['prettier --write'],
+  '**/*.{js,ts,html,css,scss,md,json,yml}': ['prettier --write'],
+  '!**/package-lock.json': [],
 };

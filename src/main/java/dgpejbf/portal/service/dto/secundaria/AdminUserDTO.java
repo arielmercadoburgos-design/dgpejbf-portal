@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;
 import java.util.stream.Collectors;
-import org.springframework.boot.autoconfigure.kafka.KafkaProperties.Admin;
 
 /**
  * A DTO representing a user, with his authorities.

@@ -56,9 +56,16 @@ public class SecondaryDatabaseConfig {
             .packages("dgpejbf.portal.domain.secundaria") // 🔹 entidades de la secundaria
             .persistenceUnit("secondary")
             .build();
-        // 🔹 Forzar el schema por defecto para Hibernate
-        em.setJpaPropertyMap(Map.of("hibernate.hbm2ddl.auto", "none", "hibernate.default_schema", "portal_dgpejbf"));
 
+        Map<String, Object> props = Map.of(
+            "hibernate.hbm2ddl.auto",
+            "none",
+            "hibernate.dialect",
+            "org.hibernate.dialect.PostgreSQLDialect",
+            "hibernate.default_schema",
+            "portal_dgpejbf" // 🔹 schema por defecto
+        );
+        em.setJpaPropertyMap(props);
         return em;
     }
 }
