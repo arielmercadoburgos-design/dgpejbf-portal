@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core'; // Agregamos signal
+import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PejRaActualDirectivoService } from './directivos-detalle-directivo.service';
@@ -12,8 +12,13 @@ import { PejRaActualDirectivoService } from './directivos-detalle-directivo.serv
       <div class="card shadow-lg border-0">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
           <h4 class="mb-0">Detalle de Directivos</h4>
-          <span class="badge bg-light text-primary">RUC: {{ ruc }}</span>
+
+          <div class="d-flex align-items-center" style="gap: 8px;">
+            <span class="badge bg-light text-primary">RUC: {{ ruc }}</span>
+            <span class="badge bg-light text-primary">Razón Social: {{ razonSocial || '-' }}</span>
+          </div>
         </div>
+
         <div class="card-body p-4">
           <div *ngIf="loading()" class="text-center my-4">
             <div class="spinner-border text-primary" role="status"></div>
@@ -55,19 +60,18 @@ import { PejRaActualDirectivoService } from './directivos-detalle-directivo.serv
         </div>
       </div>
     </div>
-  `, // <--- Corregido el cierre del template
+  `,
 })
 export class DirectivosDetalleComponent implements OnInit {
-  standalone = true;
-  imports = [CommonModule, RouterModule];
   ruc: string | null = null;
-  directivos = signal<any[]>([]); // Para almacenar los datos de portal_dgpejbf.pej_ra_actual_directivo
+  razonSocial: string | null = null;
+
+  directivos = signal<any[]>([]);
   loading = signal(false);
 
   constructor(
     private route: ActivatedRoute,
     private directivoService: PejRaActualDirectivoService,
-    // private service: PejRaActualService // Inyecta tu servicio aquí
   ) {}
 
   ngOnInit(): void {
@@ -80,16 +84,29 @@ export class DirectivosDetalleComponent implements OnInit {
   cargarDirectivos(ruc: string): void {
     this.loading.set(true);
 
-    // Aquí llamas a tu servicio para obtener los directivos por RUC
     this.directivoService.findByRuc(Number(ruc)).subscribe({
       next: (res: any[]) => {
-        this.directivos.set(res);
+        this.directivos.set(res ?? []);
+
+        // Intentar obtener razón social desde el primer registro (ajusta la clave si tu backend usa otro nombre)
+        this.razonSocial =
+          res?.[0]?.razonSocial ??
+          res?.[0]?.razon_social ??
+          res?.[0]?.razonSocialEmpresa ??
+          res?.[0]?.empresa ??
+          res?.[0]?.denominacion ??
+          null;
+
         this.loading.set(false);
+
+        // Si querés ver qué campos vienen realmente:
+        // console.log('primer registro:', res?.[0]);
       },
       error: err => {
         console.error('Error cargando directivos:', err);
         this.loading.set(false);
-        this.directivos.set([]); // Limpiar en caso de error
+        this.directivos.set([]);
+        this.razonSocial = null;
       },
     });
   }
