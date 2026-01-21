@@ -1,29 +1,55 @@
 package dgpejbf.portal.service;
 
 import dgpejbf.portal.domain.secundaria.PejRaActual;
+import dgpejbf.portal.repository.secundaria.PejRaActualDirectivoRepository;
 import dgpejbf.portal.repository.secundaria.PejRaActualRepository;
 import dgpejbf.portal.service.dto.PejRaActualDTO;
+import dgpejbf.portal.service.dto.PejRaActualDirectivoDTO;
 import dgpejbf.portal.service.mapper.secundaria.PejRaActualMapper;
+import dgpejbf.portal.service.mapper.secundaria.PejRaActualDirectivoMapper;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 @Service
 public class PejRaActualService {
 
-    
     private final PejRaActualRepository repository;
     private final PejRaActualMapper mapper;
+    private final PejRaActualDirectivoRepository directivoRepository;
+    private final PejRaActualDirectivoMapper directivoMapper;
 
-    public PejRaActualService(PejRaActualRepository repository, PejRaActualMapper mapper) {
+    public PejRaActualService(
+        PejRaActualRepository repository,
+        PejRaActualMapper mapper,
+        PejRaActualDirectivoRepository directivoRepository,
+        PejRaActualDirectivoMapper directivoMapper
+
+    ) {
         this.repository = repository;
         this.mapper = mapper;
-        
+        this.directivoRepository = directivoRepository;
+        this.directivoMapper = directivoMapper;
     }
+
+    // ✅ ESTE es el método que faltaba
+    public List<PejRaActualDirectivoDTO> findDirectivosByRuc(Integer ruc) {
+        return directivoRepository.findByRuc(ruc)
+            .stream()
+            .map(directivoMapper::toDto)
+            .collect(Collectors.toList());
+    }
+   
+    /**
+     * Obtener los directivos asociados a un RUC.
+     * @param ruc El RUC de la empresa.
+     * @return Lista de directivos.
+     */
 
     /**
      * Helper para crear la Specification para los filtros.

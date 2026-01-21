@@ -8,6 +8,7 @@ import { saveAs } from 'file-saver';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PejRaActualService, IPejRaActual, IPage } from '../list/pej-ra-actual.service';
 import SharedModule from 'app/shared/shared.module';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-pej-ra-actual-list',
@@ -26,13 +27,25 @@ export class PejRaActualListComponent implements OnInit {
   loading = signal(false);
 
   page = 0;
-  size = 20;
+  size = 15;
   sort = ['tablaId,desc'];
 
-  constructor(private pejRaActualService: PejRaActualService) {}
+  constructor(
+    private pejRaActualService: PejRaActualService,
+    private router: Router,
+    private route: ActivatedRoute,
+  ) {}
 
   ngOnInit(): void {
     this.loadPage(0); // carga inicial
+  }
+
+  verDirectivos(ruc: number | undefined): void {
+    if (ruc) {
+      // Navega a la ruta de directivos pasando el RUC
+      // Asegúrate que esta ruta exista en tu archivo de rutas
+      this.router.navigate(['/directivos-detalle', ruc]);
+    }
   }
 
   // 📄 Paginación

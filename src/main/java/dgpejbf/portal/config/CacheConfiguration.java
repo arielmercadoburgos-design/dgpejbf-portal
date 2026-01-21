@@ -49,8 +49,7 @@ public class CacheConfiguration {
             createCache(cm, dgpejbf.portal.repository.UserRepository.USERS_BY_EMAIL_CACHE);
             createCache(cm, dgpejbf.portal.domain.User.class.getName());
             createCache(cm, dgpejbf.portal.domain.Authority.class.getName());
-            createCache(cm, dgpejbf.portal.domain.User.class.getName() + ".authorities");
-            createCache(cm, dgpejbf.portal.domain.UserExtra.class.getName());
+            createCache(cm, dgpejbf.portal.domain.User.class.getName() + ".authorities");         
             // jhipster-needle-ehcache-add-entry
         };
     }
