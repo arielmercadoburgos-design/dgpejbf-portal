@@ -45,19 +45,10 @@ const routes: Routes = [
     loadComponent: () => import('./entities/dashboard/dashboard.component').then(m => m.DashboardComponent),
     title: 'Portal de datos',
   },
-  // 📁 Grilla portal de datos
+  // 📁 RUta entidades (grilla portal de datos)
   {
-    path: 'pej-ra-actual',
-    loadComponent: () => import('./entities/pej-ra-actual/list/pej-ra-actual-list.component').then(m => m.PejRaActualListComponent),
-  },
-  {
-    path: 'directivos-detalle/:ruc',
-    loadComponent: () => import('./entities/directivos-detalle/directivos-detalle.component').then(m => m.DirectivosDetalleComponent),
-    canActivate: [UserRouteAccessService],
-    data: {
-      authorities: [Authority.USER, Authority.ADMIN],
-      pageTitle: 'Detalle de Directivos',
-    },
+    path: '',
+    loadChildren: () => import('./entities/entity.routes'),
   },
   // 🌐 Página pública
   {
