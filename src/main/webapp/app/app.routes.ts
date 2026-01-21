@@ -51,6 +51,16 @@ const routes: Routes = [
     loadComponent: () => import('./entities/pej-ra-actual/list/pej-ra-actual-list.component').then(m => m.PejRaActualListComponent),
   },
   {
+    path: 'directivos-detalle/:ruc',
+    loadComponent: () => import('./entities/directivos-detalle/directivos-detalle.component').then(m => m.DirectivosDetalleComponent),
+    canActivate: [UserRouteAccessService],
+    data: {
+      authorities: [Authority.USER, Authority.ADMIN],
+      pageTitle: 'Detalle de Directivos',
+    },
+  },
+  // 🌐 Página pública
+  {
     path: 'public',
     component: HomeComponent,
     data: { pageTitle: 'Bienvenido al portal público' },

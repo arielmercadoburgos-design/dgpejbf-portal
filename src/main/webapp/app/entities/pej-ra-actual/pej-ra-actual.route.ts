@@ -1,7 +1,7 @@
 import { NgModule, Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
+import { DirectivosDetalleComponent } from '../directivos-detalle/directivos-detalle.component';
 @Component({
   selector: 'jhi-pej-ra-actual-list',
   standalone: true,
@@ -13,9 +13,12 @@ export class PejRaActualListComponent {}
     CommonModule,
     RouterModule.forChild([
       {
-        path: 'pej-ra-actual',
+        path: '',
         component: PejRaActualListComponent,
-        // la protección por ruta la cubrimos en el navbar (visibilidad),
+      },
+      {
+        path: 'directivos-detalle/:ruc',
+        component: DirectivosDetalleComponent, // En lugar de loadComponent
         // pero si quieres, puedes añadir un guard similar a UserRouteAccessService
       },
     ]),

@@ -24,12 +24,22 @@ export interface IPage<T> {
   totalPages: number;
 }
 
+export interface IDirectivo {
+  nombre?: string;
+  apellido?: string;
+  nacionalidad?: string;
+  fecha_comunicacion?: Date;
+  // Añade aquí más campos si existen en portal_dgpejbf.pej_ra_actual_directivo
+}
 @Injectable({ providedIn: 'root' })
 export class PejRaActualService {
   private resourceUrl = 'api/pej-ra-actual';
 
   constructor(private http: HttpClient) {}
 
+  getDirectivosBuyRuc(ruc: string): Observable<IDirectivo[]> {
+    return this.http.get<IDirectivo[]>(`${this.resourceUrl}/directivos/${ruc}`);
+  }
   /** Traer todos sin filtros */
   buscar(req?: any): Observable<HttpResponse<IPage<IPejRaActual>>> {
     const options = createRequestOption(req);
@@ -53,9 +63,16 @@ export class PejRaActualService {
         }
       });
     }
-
-    // IMPORTANTE: Asegúrate de que tu backend tenga el endpoint '/export'
-    // Si no tienes un endpoint específico '/export', usa solo this.resourceUrl
     return this.http.get<IPejRaActual[]>(`${this.resourceUrl}/export`, { params });
+  }
+  exportToCsv(req?: any): Observable<Blob> {
+    const options = createRequestOption(req); // Asegúrate de que esta función esté importada
+    return this.http.get(`${this.resourceUrl}/export-csv`, {
+      params: options,
+      responseType: 'blob',
+    });
+  }
+  findByRuc(ruc: string): Observable<IDirectivo[]> {
+    return this.http.get<IDirectivo[]>(`${this.resourceUrl}/directivos/${ruc}`);
   }
 }

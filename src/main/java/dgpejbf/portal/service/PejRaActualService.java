@@ -1,38 +1,65 @@
 package dgpejbf.portal.service;
 
 import dgpejbf.portal.domain.secundaria.PejRaActual;
+import dgpejbf.portal.repository.secundaria.PejRaActualDirectivoRepository;
 import dgpejbf.portal.repository.secundaria.PejRaActualRepository;
 import dgpejbf.portal.service.dto.PejRaActualDTO;
+import dgpejbf.portal.service.dto.PejRaActualDirectivoDTO;
 import dgpejbf.portal.service.mapper.secundaria.PejRaActualMapper;
+import dgpejbf.portal.service.mapper.secundaria.PejRaActualDirectivoMapper;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-
 @Service
 public class PejRaActualService {
 
-    
     private final PejRaActualRepository repository;
     private final PejRaActualMapper mapper;
+    private final PejRaActualDirectivoRepository directivoRepository;
+    private final PejRaActualDirectivoMapper directivoMapper;
 
-    public PejRaActualService(PejRaActualRepository repository, PejRaActualMapper mapper) {
+    public PejRaActualService(
+        PejRaActualRepository repository,
+        PejRaActualMapper mapper,
+        PejRaActualDirectivoRepository directivoRepository,
+        PejRaActualDirectivoMapper directivoMapper
+
+    ) {
         this.repository = repository;
         this.mapper = mapper;
-        
+        this.directivoRepository = directivoRepository;
+        this.directivoMapper = directivoMapper;
     }
+
+    // ✅ ESTE es el método que faltaba
+    public List<PejRaActualDirectivoDTO> findDirectivosByRuc(Integer ruc) {
+        return directivoRepository.findByRuc(ruc)
+            .stream()
+            .map(directivoMapper::toDto)
+            .collect(Collectors.toList());
+    }
+   
+    /**
+     * Obtener los directivos asociados a un RUC.
+     * @param ruc El RUC de la empresa.
+     * @return Lista de directivos.
+     */
 
     /**
      * Helper para crear la Specification para los filtros.
-     * La firma es (String razonSocial, Integer ruc)
+     * La firma es (String razonSocial, String tipo, Integer ruc)
      * @param razonSocial Razón Social como String.
+     * @param tipo Tipo como String.
      * @param ruc RUC como Integer.
      * @return Specification para JPA.
      */
-    private Specification<PejRaActual> buildSpecification(String razonSocial, Integer ruc) {
+    private Specification<PejRaActual> buildSpecification(String razonSocial, String tipo, Integer ruc) {
         return (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
             
@@ -41,20 +68,31 @@ public class PejRaActualService {
                 predicates.add(cb.equal(root.get("ruc"), ruc));
             }
             
-            // 2. Filtro por Razón Social (usando String)
-            if (razonSocial != null && !razonSocial.isBlank()) {
-                predicates.add(cb.like(cb.lower(root.get("razonSocial")), "%" + razonSocial.toLowerCase() + "%"));
-            }
-            
-            return cb.and(predicates.toArray(new Predicate[0]));
-        };
-    }
+if ((razonSocial != null && !razonSocial.isBlank()) ||
+            (tipo != null && !tipo.isBlank())) {
+
+            String valor = razonSocial != null && !razonSocial.isBlank()
+                ? razonSocial.toLowerCase()
+                : tipo.toLowerCase();
+
+            Predicate razonSocialLike =
+                cb.like(cb.lower(root.get("razonSocial")), "%" + valor + "%");
+
+            Predicate tipoLike =
+                cb.like(cb.lower(root.get("tipo")), "%" + valor + "%");
+
+            predicates.add(cb.or(razonSocialLike, tipoLike));
+        }
+
+        return cb.and(predicates.toArray(new Predicate[0]));
+    };
+}
 
     
     /**
      * Buscar con filtros dinámicos y paginación.
      */
-    public Page<PejRaActualDTO> buscar(String ruc, String razonSocial, Pageable pageable) {
+    public Page<PejRaActualDTO> buscar(String ruc, String razonSocial, String tipo, Pageable pageable) {
         // Conversión de RUC de String a Integer para usar en la Specification
         Integer rucAsInteger = null;
         if (ruc != null && !ruc.isBlank()) {
@@ -67,18 +105,18 @@ public class PejRaActualService {
         }
         
         // Llamamos al método helper
-        Specification<PejRaActual> spec = buildSpecification(razonSocial, rucAsInteger);
+        Specification<PejRaActual> spec = buildSpecification(razonSocial, tipo, rucAsInteger);
 
         return repository.findAll(spec, pageable).map(mapper::toDto);
     }
     
     /**
      * Exportar todos los datos filtrados (no paginados).
-     * FIRMA REQUERIDA POR EL RECURSO: (String razonSocial, Integer ruc)
+     * FIRMA REQUERIDA POR EL RECURSO: (String razonSocial, String tipo, Integer ruc)
      */
-    public List<PejRaActualDTO> exportAll(String razonSocial, Integer ruc) {
+    public List<PejRaActualDTO> exportAll(String razonSocial, String tipo, Integer ruc) {
         // Usamos la misma Specification pero con los tipos correctos (razonSocial=String, ruc=Integer)
-        Specification<PejRaActual> spec = buildSpecification(razonSocial, ruc);
+        Specification<PejRaActual> spec = buildSpecification(razonSocial, tipo, ruc);
 
         // Llamamos a findAll sin Pageable para obtener todos los resultados
         List<PejRaActual> results = repository.findAll(spec);
