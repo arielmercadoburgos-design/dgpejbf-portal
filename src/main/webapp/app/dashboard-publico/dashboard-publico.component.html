@@ -1,0 +1,8 @@
+<div class="card mt-4">
+  <div class="card-header">{{ titulo }}</div>
+  <div class="card-body p-0">
+    <iframe *ngIf="metabaseUrl" [src]="metabaseUrl! | safeUrl" width="100%" height="700" frameborder="0"> </iframe>
+
+    <div *ngIf="!metabaseUrl" class="text-center p-5">Cargando dashboard de Metabase...</div>
+  </div>
+</div>

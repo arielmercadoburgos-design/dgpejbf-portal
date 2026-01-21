@@ -1,13 +1,21 @@
-<jhi-page-ribbon />
+<header class="gov-header">
+  <div class="gov-header-inner">
+    <div class="gov-header-left">
+      <img src="content/images/LOGOS_GOBIERNO_BLANCO.png" alt="Gobierno del Paraguay" />
+      <h2>Portal DGPEJBF - Ministerio de Economía y Finanzas</h2>
+    </div>
 
-<div>
-  <router-outlet name="navbar" />
-</div>
-
-<div class="container-fluid">
-  <div class="card jh-card">
-    <router-outlet />
+    <!-- Navbar dentro del header -->
+    <router-outlet name="navbar"></router-outlet>
   </div>
+</header>
 
-  <jhi-footer />
-</div>
+<jhi-page-ribbon></jhi-page-ribbon>
+
+<!-- Contenido principal (SIN container-fluid ni card jh-card) -->
+<main class="main-content">
+  <router-outlet></router-outlet>
+</main>
+
+<!-- Footer -->
+<jhi-footer></jhi-footer>
