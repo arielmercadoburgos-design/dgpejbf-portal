@@ -77,6 +77,8 @@ export class DirectivosDetalleComponent implements OnInit {
 
   ngOnInit(): void {
     this.ruc = this.route.snapshot.paramMap.get('ruc');
+    this.razonSocial = this.route.snapshot.queryParamMap.get('razonSocial');
+
     if (this.ruc) {
       this.cargarDirectivos(this.ruc);
     }

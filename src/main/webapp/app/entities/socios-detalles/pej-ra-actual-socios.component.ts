@@ -24,8 +24,13 @@ export interface ISocios {
       <div class="card shadow-lg border-0">
         <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
           <h4 class="mb-0">Detalle de Socios / Accionistas</h4>
-          <span class="badge bg-light text-success">RUC Empresa: {{ ruc }}</span>
+
+          <div class="d-flex align-items-center" style="gap: 8px;">
+            <span class="badge bg-light text-success">RUC Empresa: {{ ruc }}</span>
+            <span class="badge bg-light text-success">Razón Social: {{ razonSocial || '-' }}</span>
+          </div>
         </div>
+
         <div class="card-body p-4">
           <div *ngIf="loading()" class="text-center my-4">
             <div class="spinner-border text-success" role="status"></div>
@@ -75,6 +80,7 @@ export interface ISocios {
 })
 export class PejRaActualSociosListComponent implements OnInit {
   ruc: string | null = null;
+  razonSocial: string | null = null;
   socios = signal<any[]>([]);
   loading = signal(false);
 
@@ -85,6 +91,8 @@ export class PejRaActualSociosListComponent implements OnInit {
 
   ngOnInit(): void {
     this.ruc = this.route.snapshot.paramMap.get('ruc');
+    this.razonSocial = this.route.snapshot.queryParamMap.get('razonSocial');
+
     if (this.ruc) {
       this.cargarSocios(this.ruc);
     }

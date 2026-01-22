@@ -40,18 +40,22 @@ export class PejRaActualListComponent implements OnInit {
     this.loadPage(0); // carga inicial
   }
 
-  verDirectivos(ruc: number | undefined): void {
+  verDirectivos(item: IPejRaActual): void {
+    const ruc = item?.ruc;
     if (ruc) {
-      // Navega a la ruta de directivos pasando el RUC
-      // Asegúrate que esta ruta exista en tu archivo de rutas
-      this.router.navigate(['/directivos', ruc]);
+      this.router.navigate(['/directivos', ruc], {
+        queryParams: { razonSocial: item.razonSocial ?? '' },
+      });
     }
   }
+
   // NUEVA FUNCIÓN PARA SOCIOS
-  verSocios(ruc: number | undefined): void {
+  verSocios(item: IPejRaActual): void {
+    const ruc = item?.ruc;
     if (ruc) {
-      // Navega a la nueva ruta de socios pasando el RUC
-      this.router.navigate(['/socios', ruc]);
+      this.router.navigate(['/socios', ruc], {
+        queryParams: { razonSocial: item.razonSocial ?? '' },
+      });
     }
   }
 
