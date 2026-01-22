@@ -41,12 +41,18 @@
             <span>Menú</span>
           </a>
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
-            <!-- agrego mi nuevo boton para el portal de datos modo grilla-->
+            <!-- agrego mi nuevo boton para el portal de datos -->
             <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
               <a class="dropdown-item d-flex align-items-center" routerLink="/pej-ra-actual" (click)="collapseNavbar()">
                 <fa-icon icon="chart-bar" [fixedWidth]="true" class="me-2"></fa-icon>
 
-                <span>Grilla Portal de Datos</span>
+                <span>Registro Administrativo - PEJ</span>
+              </a>
+            </li>
+            <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
+              <a class="dropdown-item d-flex align-items-center" routerLink="/bf-ra-actual" (click)="collapseNavbar()">
+                <fa-icon icon="chart-bar" [fixedWidth]="true" class="me-2"></fa-icon>
+                <span>Registro Administrativo - BF</span>
               </a>
             </li>
           </ul>
@@ -199,18 +205,6 @@
                 <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
                   <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
                   <span jhiTranslate="global.menu.account.login">Iniciar sesión</span>
-                </a>
-              </li>
-              <li>
-                <a
-                  class="dropdown-item"
-                  routerLink="/account/register"
-                  routerLinkActive="active"
-                  (click)="collapseNavbar()"
-                  data-cy="register"
-                >
-                  <fa-icon icon="user-plus" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.register">Crear una cuenta</span>
                 </a>
               </li>
             }
