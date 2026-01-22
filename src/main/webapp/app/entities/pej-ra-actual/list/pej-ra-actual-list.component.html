@@ -3,8 +3,8 @@
     <h4 class="mb-0">Registros Administrativos de Personas y Estructuras Jurídicas</h4>
     <br />
     <div class="btn-group shadow-sm">
-      <button class="btn btn-sm btn-success" (click)="exportToExcelAll()">Exportar .xls</button>
-      <button class="btn btn-sm btn-success" (click)="exportarCSV()">Exportar .csv</button>
+      <button class="btn btn-sm btn-light text-primary me-2">Exportar .xls</button>
+      <button class="btn btn-sm btn-light text-primary">Exportar .csv</button>
     </div>
   </div>
 
@@ -60,9 +60,11 @@
             <td>
               <div class="btn-group shadow-sm">
                 <button class="btn btn-sm btn-outline-primary" (click)="verDirectivos(item.ruc)" title="Ver Directivos">
-                  <i class="fa fa-users me-1"></i> Directivos</button>
-                <button class="btn btn-sm btn-outline-success"(click)="verSocios(item.ruc)" title="Ver Socios">
-                  <i class="fa fa-handshake me-1"></i> Socios</button>
+                  <i class="fa fa-users me-1"></i> Directivos
+                </button>
+                <button class="btn btn-sm btn-outline-success" (click)="verSocios(item.ruc)" title="Ver Socios">
+                  <i class="fa fa-handshake me-1"></i> Socios
+                </button>
               </div>
             </td>
           </tr>
