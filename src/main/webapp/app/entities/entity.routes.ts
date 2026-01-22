@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { User } from 'app/admin/user-management/user-management.model';
 import { UserRouteAccessService } from 'app/core/auth/user-route-access.service';
 
 const routes: Routes = [
@@ -18,13 +17,24 @@ const routes: Routes = [
     data: { pageTitle: 'Registros Administrativos' },
     loadComponent: () => import('./pej-ra-actual/list/pej-ra-actual-list.component').then(m => m.PejRaActualListComponent),
   },
+  // detalle de directivos
   {
-    path: 'directivos-detalle/:ruc',
+    path: 'directivos/:ruc',
     loadComponent: () => import('./directivos-detalle/directivos-detalle.component').then(m => m.DirectivosDetalleComponent),
     canActivate: [UserRouteAccessService],
     data: {
       authorities: ['ROLE_USER', 'ROLE_ADMIN'],
       pageTitle: 'Detalle de Directivos',
+    },
+  },
+  // detalle de socios
+  {
+    path: 'socios/:ruc',
+    loadComponent: () => import('./socios-detalles/pej-ra-actual-socios.component').then(m => m.PejRaActualSociosListComponent),
+    canActivate: [UserRouteAccessService],
+    data: {
+      authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+      pageTitle: 'Detalle de Socios',
     },
   },
   {

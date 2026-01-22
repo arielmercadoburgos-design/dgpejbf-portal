@@ -2,6 +2,7 @@ import { Component, OnInit, signal } from '@angular/core'; // Agregamos signal
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PejRaActualDirectivoService } from './directivos-detalle-directivo.service';
+import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
 
 @Component({
   selector: 'jhi-directivos-detalle',
@@ -82,7 +83,7 @@ export class DirectivosDetalleComponent implements OnInit {
 
     // Aquí llamas a tu servicio para obtener los directivos por RUC
     this.directivoService.findByRuc(Number(ruc)).subscribe({
-      next: (res: any[]) => {
+      next: (res: IDirectivo[]) => {
         this.directivos.set(res);
         this.loading.set(false);
       },

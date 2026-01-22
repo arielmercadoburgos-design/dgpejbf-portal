@@ -2,10 +2,13 @@ package dgpejbf.portal.web.rest;
 
 import dgpejbf.portal.service.PejRaActualService;
 import dgpejbf.portal.service.dto.PejRaActualDTO;
+import dgpejbf.portal.service.dto.PejRaActualDirectivoDTO;
+import dgpejbf.portal.service.dto.PejRaActualSociosDTO;
+import dgpejbf.portal.service.PejRaActualSociosService;
+import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -17,10 +20,11 @@ import java.nio.charset.StandardCharsets;
 public class PejRaActualResource {
 
     private final PejRaActualService service;
-    
-    public PejRaActualResource(PejRaActualService pejRaActualService) {
-        this.service = pejRaActualService;
+    private final PejRaActualSociosService pejRaActualSociosService;
 
+    public PejRaActualResource(PejRaActualService pejRaActualService, PejRaActualSociosService pejRaActualSociosService) {
+        this.service = pejRaActualService;
+        this.pejRaActualSociosService = pejRaActualSociosService;
     }
 
     /**
@@ -93,4 +97,22 @@ public class PejRaActualResource {
             .contentType(MediaType.parseMediaType("text/csv"))
             .body(resource);
     }
+        /**
+     * Directivos por RUC
+     */
+    @GetMapping("/directivos/{ruc}")
+    public List<PejRaActualDirectivoDTO> getDirectivos(@PathVariable Integer ruc) {
+        return service.findDirectivosByRuc(ruc);
     }
+
+    /**
+     * Socios por RUC
+     */
+    @GetMapping("/socios/{ruc}")
+    public List<PejRaActualSociosDTO> getSocios(
+        @PathVariable Integer ruc
+    ) {
+        return pejRaActualSociosService.buscarPorRuc(ruc);
+    }
+}
+

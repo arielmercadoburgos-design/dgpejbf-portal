@@ -37,8 +37,14 @@ export class PejRaActualService {
 
   constructor(private http: HttpClient) {}
 
+  /** Trae directivos por RUC */
+
   getDirectivosBuyRuc(ruc: string): Observable<IDirectivo[]> {
     return this.http.get<IDirectivo[]>(`${this.resourceUrl}/directivos/${ruc}`);
+  }
+  /** Trae socios por RUC */
+  getSociosByRuc(ruc: string): Observable<IDirectivo[]> {
+    return this.http.get<IDirectivo[]>(`${this.resourceUrl}/socios/${ruc}`);
   }
   /** Traer todos sin filtros */
   buscar(req?: any): Observable<HttpResponse<IPage<IPejRaActual>>> {
@@ -71,8 +77,5 @@ export class PejRaActualService {
       params: options,
       responseType: 'blob',
     });
-  }
-  findByRuc(ruc: string): Observable<IDirectivo[]> {
-    return this.http.get<IDirectivo[]>(`${this.resourceUrl}/directivos/${ruc}`);
   }
 }

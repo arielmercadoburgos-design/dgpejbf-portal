@@ -44,7 +44,14 @@ export class PejRaActualListComponent implements OnInit {
     if (ruc) {
       // Navega a la ruta de directivos pasando el RUC
       // Asegúrate que esta ruta exista en tu archivo de rutas
-      this.router.navigate(['/directivos-detalle', ruc]);
+      this.router.navigate(['/directivos', ruc]);
+    }
+  }
+  // NUEVA FUNCIÓN PARA SOCIOS
+  verSocios(ruc: number | undefined): void {
+    if (ruc) {
+      // Navega a la nueva ruta de socios pasando el RUC
+      this.router.navigate(['/socios', ruc]);
     }
   }
 
