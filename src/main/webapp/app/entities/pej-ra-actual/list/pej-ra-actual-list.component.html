@@ -38,26 +38,35 @@
       <table class="table table-hover align-middle mb-0">
         <thead class="thead-azul">
           <tr>
-            <th>RUC</th>
-            <th>DV</th>
-            <th>RAZÓN SOCIAL</th>
-            <th>TIPO</th>
-            <th>COMUNICACIÓN</th>
-            <th>FECHA</th>
-            <th>ACCIONES</th>
+            <th class="text-start">RUC</th>
+            <th class="text-center">DV</th>
+            <th class="text-start">RAZÓN SOCIAL</th>
+            <th class="text-start">TIPO</th>
+            <th class="text-start">COMUNICACIÓN</th>
+            <th class="text-end">FECHA</th>
+            <th class="text-center" style="width: 180px">ACCIONES</th>
           </tr>
         </thead>
+
         <tbody>
           <tr *ngFor="let item of itemsFiltrados()">
-            <td class="fw-bold text-primary">{{ item.ruc }}</td>
-            <td class="text-muted">{{ item.dv }}</td>
-            <td>{{ item.razonSocial }}</td>
-            <td>
-              <span class="badge bg-transparent text-info-emphasis">{{ item.tipo }}</span>
+            <td class="fw-bold text-primary text-start">{{ item.ruc }}</td>
+
+            <td class="text-center text-muted">{{ item.dv }}</td>
+
+            <td class="text-start">{{ item.razonSocial }}</td>
+
+            <td class="text-start text-secondary fw-medium">
+              {{ item.tipo }}
             </td>
-            <td>{{ item.tipoComunicacion }}</td>
-            <td class="small">{{ item.fechaComunicacion | date: 'dd/MM/yyyy HH:mm' }}</td>
-            <td>
+
+            <td class="text-start">{{ item.tipoComunicacion }}</td>
+
+            <td class="text-end small">
+              {{ item.fechaComunicacion | date: 'dd/MM/yyyy HH:mm' }}
+            </td>
+
+            <td class="text-center">
               <div class="btn-group shadow-sm">
                 <button class="btn btn-sm btn-outline-primary" (click)="verDirectivos(item)" title="Ver Directivos">
                   <i class="fa fa-users me-1"></i> Directivos

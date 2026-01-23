@@ -41,24 +41,30 @@ export interface ISocios {
             <table class="table table-hover align-middle">
               <thead class="table-light">
                 <tr>
-                  <th>NOMBRES Y APELLIDOS</th>
-                  <th>NUMERO DE DOCUMENTO</th>
-                  <th class="text-center">Acciones</th>
+                  <th class="text-start ps-4">Nombres y Apellidos</th>
+                  <th class="text-end">Número de Documento</th>
+                  <th class="text-end">Acciones</th>
                   <th class="text-center">% Part.</th>
-                  <th class="text-center">Votos</th>
-                  <th>Profesión</th>
+                  <th class="text-end">Votos</th>
+                  <th class="text-start pe-4">Profesión</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr *ngFor="let s of socios()">
-                  <td class="text-dark fw-medium">{{ s.nombre }}</td>
-                  <td class="text-muted">{{ s.cedula || s.rucSocio }}</td>
-                  <td class="text-center">{{ s.cantidadAcciones }}</td>
+                  <td class="ps-4 text-start">{{ s.nombre }}</td>
+
+                  <td class="text-end text-muted">{{ s.cedula }}</td>
+
+                  <td class="text-end">{{ s.cantidadAcciones }}</td>
+
                   <td class="text-center">
-                    <span class="badge rounded-pill bg-info text-dark">{{ s.porcentaje }}%</span>
+                    <span class="badge rounded-pill bg-info text-dark"> {{ s.porcentaje }}% </span>
                   </td>
-                  <td class="text-center">{{ s.cantidadVotos }}</td>
-                  <td class="text-muted small">{{ s.profesion }}</td>
+
+                  <td class="text-end">{{ s.cantidadVotos }}</td>
+
+                  <td class="text-start text-muted pe-4">{{ s.profesion || '-' }}</td>
                 </tr>
               </tbody>
             </table>

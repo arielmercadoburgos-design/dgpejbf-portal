@@ -30,20 +30,24 @@ import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
             <table class="table table-hover align-middle">
               <thead class="table-light">
                 <tr>
-                  <th>Nombre y Apellido</th>
-                  <th>Cargo</th>
-                  <th>Documento</th>
-                  <th>Fecha de Asunción</th>
+                  <th class="text-start ps-4">Nombre y Apellido</th>
+                  <th class="text-start">Cargo</th>
+                  <th class="text-end">Número de Documento</th>
+                  <th class="text-center">Fecha de Asunción</th>
                 </tr>
               </thead>
+
               <tbody>
                 <tr *ngFor="let d of directivos()">
-                  <td class="ps-4 text-dark">{{ d.nombre }}</td>
-                  <td>
+                  <td class="ps-3 text-start text-dark">{{ d.nombre }}</td>
+
+                  <td class="text-start">
                     <span class="text-primary fw-medium">{{ d.cargo }}</span>
                   </td>
-                  <td class="text-muted">{{ d.cedula }}</td>
-                  <td class="text-muted">{{ d.fechaAsuncion }}</td>
+
+                  <td class="text-end text-muted">{{ d.cedula }}</td>
+
+                  <td class="text-center text-muted">{{ d.fechaAsuncion }}</td>
                 </tr>
               </tbody>
             </table>
