@@ -25,10 +25,16 @@ export interface IPage<T> {
 }
 
 export interface IDirectivo {
+  ruc?: string;
+  razonSocial?: string;
+  tipo?: string;
   nombre?: string;
   apellido?: string;
   nacionalidad?: string;
   fecha_comunicacion?: Date;
+  cargo?: string;
+  cedula?: string;
+  fechaAsuncion?: string;
   // Añade aquí más campos si existen en portal_dgpejbf.pej_ra_actual_directivo
 }
 @Injectable({ providedIn: 'root' })

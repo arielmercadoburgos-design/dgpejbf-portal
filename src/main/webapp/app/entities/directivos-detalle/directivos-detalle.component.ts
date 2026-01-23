@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { PejRaActualDirectivoService } from './directivos-detalle-directivo.service';
 import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'jhi-directivos-detalle',
@@ -14,7 +16,13 @@ import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
           <h4 class="mb-0">Detalle de Directivos</h4>
 
-          <div class="d-flex align-items-center" style="gap: 8px;">
+          <div class="d-flex align-items-center gap-2">
+            <button class="btn btn-light btn-sm" (click)="exportarExcel()" [disabled]="directivos().length === 0">
+              <i class="fa fa-file-excel-o text-success"></i> Excel
+            </button>
+            <button class="btn btn-light btn-sm" (click)="exportarCSV()" [disabled]="directivos().length === 0">
+              <i class="fa fa-file-text-o text-primary"></i> CSV
+            </button>
             <span class="badge bg-light text-primary">RUC: {{ ruc }}</span>
             <span class="badge bg-light text-primary">Razón Social: {{ razonSocial || '-' }}</span>
           </div>
@@ -22,7 +30,7 @@ import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
 
         <div class="card-body p-4">
           <div *ngIf="loading()" class="text-center my-4">
-            <div class="spinner-border text-primary" role="status"></div>
+            <div class="spinner-border text-primary"></div>
             <p>Cargando directivos...</p>
           </div>
 
@@ -30,22 +38,19 @@ import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
             <table class="table table-hover align-middle">
               <thead class="table-light">
                 <tr>
-                  <th class="text-start ps-4">Nombre y Apellido</th>
-                  <th class="text-start">Cargo</th>
-                  <th class="text-end">Número de Documento</th>
+                  <th>Nombre y Apellido</th>
+                  <th>Cargo</th>
+                  <th class="text-end">Documento</th>
                   <th class="text-center">Fecha de Asunción</th>
                 </tr>
               </thead>
 
               <tbody>
                 <tr *ngFor="let d of directivos()">
-                  <td class="ps-3 text-start text-dark">{{ d.nombre }}</td>
-
-                  <td class="ps-3 text-start text-dark">{{ d.cargo }}</td>
-
-                  <td class="text-end text-muted">{{ d.cedula }}</td>
-
-                  <td class="text-center text-muted">{{ d.fechaAsuncion }}</td>
+                  <td>{{ d.nombre }}</td>
+                  <td>{{ d.cargo }}</td>
+                  <td class="text-end">{{ d.cedula }}</td>
+                  <td class="text-center">{{ d.fechaAsuncion }}</td>
                 </tr>
               </tbody>
             </table>
@@ -56,9 +61,7 @@ import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
           </div>
 
           <div class="mt-4">
-            <button class="btn btn-outline-secondary" [routerLink]="['/pej-ra-actual']">
-              <i class="fa fa-arrow-left"></i> Volver a la lista
-            </button>
+            <button class="btn btn-outline-secondary" [routerLink]="['/pej-ra-actual']">Volver a la lista</button>
           </div>
         </div>
       </div>
@@ -68,8 +71,11 @@ import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
 export class DirectivosDetalleComponent implements OnInit {
   ruc: string | null = null;
   razonSocial: string | null = null;
+  cargo: string | null = null;
+  cedula: string | null = null;
+  fechaAsuncion: string | null = null;
 
-  directivos = signal<any[]>([]);
+  directivos = signal<IDirectivo[]>([]);
   loading = signal(false);
 
   constructor(
@@ -93,16 +99,56 @@ export class DirectivosDetalleComponent implements OnInit {
       next: (res: IDirectivo[]) => {
         this.directivos.set(res);
         this.loading.set(false);
-
-        // Si querés ver qué campos vienen realmente:
-        // console.log('primer registro:', res?.[0]);
       },
       error: err => {
         console.error('Error cargando directivos:', err);
-        this.loading.set(false);
         this.directivos.set([]);
-        this.razonSocial = null;
+        this.loading.set(false);
       },
     });
+  }
+
+  // ✅ EXPORT CSV
+  exportarCSV(): void {
+    const data = this.directivos();
+    if (!data.length) return;
+    const separator = ';';
+
+    const headers = ['RUC', 'RAZON SOCIAL', 'TIPO', 'NOMBRE', 'CARGO', 'DDOCUMENTO', 'FECHA ASUNCION'];
+    const rows = data.map(d =>
+      [d.ruc, d.razonSocial, d.tipo, d.nombre, d.cargo, d.cedula, d.fechaAsuncion].map(v => `"${v ?? ''}"`).join(separator),
+    );
+    const csvContent = [headers.join(separator), ...rows].join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+
+    saveAs(blob, `directivos_${this.ruc}.csv`);
+  }
+
+  // ✅ EXPORT EXCEL
+  exportarExcel(): void {
+    const data = this.directivos();
+    if (!data.length) return;
+
+    const worksheet = XLSX.utils.json_to_sheet(
+      data.map(d => ({
+        ruc: d.ruc,
+        razonSocial: d.razonSocial,
+        Tipo: d.tipo,
+        Nombre: d.nombre,
+        Cargo: d.cargo,
+        Documento: d.cedula,
+        'Fecha Asunción': d.fechaAsuncion,
+      })),
+    );
+
+    const workbook = {
+      Sheets: { Directivos: worksheet },
+      SheetNames: ['Directivos'],
+    };
+
+    const buffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob = new Blob([buffer], { type: 'application/octet-stream' });
+
+    saveAs(blob, `directivos_${this.ruc}.xlsx`);
   }
 }
