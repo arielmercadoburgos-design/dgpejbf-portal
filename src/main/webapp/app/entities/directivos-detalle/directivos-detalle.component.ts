@@ -41,9 +41,7 @@ import { IDirectivo } from '../pej-ra-actual/list/pej-ra-actual.service';
                 <tr *ngFor="let d of directivos()">
                   <td class="ps-3 text-start text-dark">{{ d.nombre }}</td>
 
-                  <td class="text-start">
-                    <span class="text-primary fw-medium">{{ d.cargo }}</span>
-                  </td>
+                  <td class="ps-3 text-start text-dark">{{ d.cargo }}</td>
 
                   <td class="text-end text-muted">{{ d.cedula }}</td>
 

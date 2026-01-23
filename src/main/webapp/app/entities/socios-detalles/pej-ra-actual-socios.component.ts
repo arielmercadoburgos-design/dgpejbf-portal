@@ -43,10 +43,9 @@ export interface ISocios {
                 <tr>
                   <th class="text-start ps-4">Nombres y Apellidos</th>
                   <th class="text-end">Número de Documento</th>
-                  <th class="text-end">Acciones</th>
-                  <th class="text-center">% Part.</th>
-                  <th class="text-end">Votos</th>
-                  <th class="text-start pe-4">Profesión</th>
+                  <th class="text-end">Cantidad de Acciones</th>
+                  <th class="text-center">Valor de Acciones</th>
+                  <th class="text-end">Cantidad de Votos</th>
                 </tr>
               </thead>
 
@@ -58,13 +57,9 @@ export interface ISocios {
 
                   <td class="text-end">{{ s.cantidadAcciones }}</td>
 
-                  <td class="text-center">
-                    <span class="badge rounded-pill bg-info text-dark"> {{ s.porcentaje }}% </span>
-                  </td>
+                  <td class="text-center">{{ s.valorAcciones }}</td>
 
                   <td class="text-end">{{ s.cantidadVotos }}</td>
-
-                  <td class="text-start text-muted pe-4">{{ s.profesion || '-' }}</td>
                 </tr>
               </tbody>
             </table>
