@@ -41,7 +41,7 @@ export class PejRaActualListComponent implements OnInit {
   }
 
   verDirectivos(item: IPejRaActual): void {
-    const ruc = item?.ruc;
+    const ruc = item.ruc;
     if (ruc) {
       this.router.navigate(['/directivos', ruc], {
         queryParams: { razonSocial: item.razonSocial ?? '' },
@@ -51,10 +51,10 @@ export class PejRaActualListComponent implements OnInit {
 
   // NUEVA FUNCIÓN PARA SOCIOS
   verSocios(item: IPejRaActual): void {
-    const ruc = item?.ruc;
+    const ruc = item.ruc;
     if (ruc) {
       this.router.navigate(['/socios', ruc], {
-        queryParams: { razonSocial: item.razonSocial ?? '' },
+        queryParams: { razonSocial: item.razonSocial ?? '', tipo: item.tipo ?? '' },
       });
     }
   }

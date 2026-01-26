@@ -2,6 +2,7 @@ export interface IPejRaActualSocios {
   tablaId?: number;
   ruc?: number;
   razonSocial?: string;
+  tipo?: string;
   nombre?: string;
   cedula?: string;
   rucSocio?: string;
@@ -17,6 +18,7 @@ export class PejRaActualSocios implements IPejRaActualSocios {
     public tablaId?: number,
     public ruc?: number,
     public razonSocial?: string,
+    public tipo?: string,
     public nombre?: string,
     public cedula?: string,
     public rucSocio?: string,

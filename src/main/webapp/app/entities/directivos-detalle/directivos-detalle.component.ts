@@ -77,7 +77,6 @@ import { saveAs } from 'file-saver';
 export class DirectivosDetalleComponent implements OnInit {
   ruc: string | null = null;
   razonSocial: string | null = null;
-
   directivos = signal<IDirectivo[]>([]);
   loading = signal(false);
 

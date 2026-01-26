@@ -23,7 +23,7 @@ export interface IPage<T> {
   number: number; // página actual
   totalPages: number;
 }
-
+// Interfaz para la directivos
 export interface IDirectivo {
   ruc?: string;
   razonSocial?: string;
@@ -37,6 +37,20 @@ export interface IDirectivo {
   fechaAsuncion?: string;
   // Añade aquí más campos si existen en portal_dgpejbf.pej_ra_actual_directivo
 }
+// Interfaz para la socios
+export interface ISocios {
+  ruc?: string;
+  razonSocial?: string;
+  tipo?: string;
+  nombre: string;
+  cedula?: string;
+  rucSocio?: string;
+  cantidadAcciones: number;
+  porcentaje: number;
+  valorAcciones: number;
+  cantidadVotos: number;
+  profesion?: string;
+}
 @Injectable({ providedIn: 'root' })
 export class PejRaActualService {
   private resourceUrl = 'api/pej-ra-actual';
@@ -49,8 +63,12 @@ export class PejRaActualService {
     return this.http.get<IDirectivo[]>(`${this.resourceUrl}/directivos/${ruc}`);
   }
   /** Trae socios por RUC */
-  getSociosByRuc(ruc: string): Observable<IDirectivo[]> {
-    return this.http.get<IDirectivo[]>(`${this.resourceUrl}/socios/${ruc}`);
+  getSociosByRuc(ruc: string): Observable<ISocios[]> {
+    return this.http.get<ISocios[]>(`${this.resourceUrl}/socios/${ruc}`);
+  }
+
+  findByRucS(ruc: number | string): Observable<ISocios[]> {
+    return this.getSociosByRuc(ruc.toString());
   }
   /** Traer todos sin filtros */
   buscar(req?: any): Observable<HttpResponse<IPage<IPejRaActual>>> {

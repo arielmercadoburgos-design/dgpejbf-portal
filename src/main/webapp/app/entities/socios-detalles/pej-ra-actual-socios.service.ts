@@ -8,11 +8,4 @@ export class PejRaActualSociosService {
   private resourceUrl = '/api/pej-ra-actual';
 
   constructor(protected http: HttpClient) {}
-
-  /**
-   * Método para buscar socios por RUC
-   */
-  findByRuc(ruc: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.resourceUrl}/socios/${ruc}`);
-  }
 }

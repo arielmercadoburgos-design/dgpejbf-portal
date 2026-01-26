@@ -18,8 +18,9 @@ public class PejRaActualSociosDTO implements Serializable {
     private String valorAcciones;
     private String porcentaje;
     private String cantidadVotos;
-    private Integer tramiteId;
-    private Instant fechaComunicacion;
+    private Instant fechaActualizacion;
+
+    
 
     // --- Constructor Vacío ---
     public PejRaActualSociosDTO() {
@@ -66,9 +67,7 @@ public class PejRaActualSociosDTO implements Serializable {
     public String getCantidadVotos() { return cantidadVotos; }
     public void setCantidadVotos(String cantidadVotos) { this.cantidadVotos = cantidadVotos; }
 
-    public Integer getTramiteId() { return tramiteId; }
-    public void setTramiteId(Integer tramiteId) { this.tramiteId = tramiteId; }
+    public Instant getFechaActualizacion() { return fechaActualizacion; }
+    public void setFechaActualizacion(Instant fechaActualizacion) { this.fechaActualizacion = fechaActualizacion; }
 
-    public Instant getFechaComunicacion() { return fechaComunicacion; }
-    public void setFechaComunicacion(Instant fechaComunicacion) { this.fechaComunicacion = fechaComunicacion; }
 }
