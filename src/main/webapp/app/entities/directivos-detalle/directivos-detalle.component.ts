@@ -13,21 +13,27 @@ import { saveAs } from 'file-saver';
   template: `
     <div class="container mt-4">
       <div class="card shadow-lg border-0">
-        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <h4 class="mb-0">Detalle de Directivos</h4>
+        <!-- HEADER -->
+        <div class="card-header bg-primary text-white">
+          <!-- FILA 1: Título izq / Badges der (como Socios) -->
+          <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <h4 class="mb-0">Detalle de Directivos</h4>
 
-          <div class="d-flex align-items-center gap-2">
-            <button class="btn btn-light btn-sm" (click)="exportarExcel()" [disabled]="directivos().length === 0">
-              <i class="fa fa-file-excel-o text-success"></i> Excel
-            </button>
-            <button class="btn btn-light btn-sm" (click)="exportarCSV()" [disabled]="directivos().length === 0">
-              <i class="fa fa-file-text-o text-primary"></i> CSV
-            </button>
-            <span class="badge bg-light text-primary">RUC: {{ ruc }}</span>
-            <span class="badge bg-light text-primary">Razón Social: {{ razonSocial || '-' }}</span>
+            <div class="d-flex gap-2 flex-wrap">
+              <span class="badge bg-light text-primary">RUC Empresa: {{ ruc }}</span>
+              <span class="badge bg-light text-primary">Razón Social: {{ razonSocial || '-' }}</span>
+            </div>
+          </div>
+
+          <!-- FILA 2: Botones abajo a la izquierda -->
+          <div class="mt-2 d-flex gap-2 flex-wrap">
+            <button class="btn btn-light btn-sm" (click)="exportarExcel()" [disabled]="directivos().length === 0">Exportar .xls</button>
+
+            <button class="btn btn-light btn-sm" (click)="exportarCSV()" [disabled]="directivos().length === 0">Exportar .csv</button>
           </div>
         </div>
 
+        <!-- BODY -->
         <div class="card-body p-4">
           <div *ngIf="loading()" class="text-center my-4">
             <div class="spinner-border text-primary"></div>
@@ -71,9 +77,6 @@ import { saveAs } from 'file-saver';
 export class DirectivosDetalleComponent implements OnInit {
   ruc: string | null = null;
   razonSocial: string | null = null;
-  cargo: string | null = null;
-  cedula: string | null = null;
-  fechaAsuncion: string | null = null;
 
   directivos = signal<IDirectivo[]>([]);
   loading = signal(false);
@@ -108,31 +111,33 @@ export class DirectivosDetalleComponent implements OnInit {
     });
   }
 
-  // ✅ EXPORT CSV
+  // EXPORT CSV
   exportarCSV(): void {
     const data = this.directivos();
     if (!data.length) return;
-    const separator = ';';
 
-    const headers = ['RUC', 'RAZON SOCIAL', 'TIPO', 'NOMBRE', 'CARGO', 'DDOCUMENTO', 'FECHA ASUNCION'];
+    const separator = ';';
+    const headers = ['RUC', 'RAZON SOCIAL', 'TIPO', 'NOMBRE', 'CARGO', 'DOCUMENTO', 'FECHA ASUNCION'];
+
     const rows = data.map(d =>
       [d.ruc, d.razonSocial, d.tipo, d.nombre, d.cargo, d.cedula, d.fechaAsuncion].map(v => `"${v ?? ''}"`).join(separator),
     );
+
     const csvContent = [headers.join(separator), ...rows].join('\n');
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
 
     saveAs(blob, `directivos_${this.ruc}.csv`);
   }
 
-  // ✅ EXPORT EXCEL
+  // EXPORT EXCEL
   exportarExcel(): void {
     const data = this.directivos();
     if (!data.length) return;
 
     const worksheet = XLSX.utils.json_to_sheet(
       data.map(d => ({
-        ruc: d.ruc,
-        razonSocial: d.razonSocial,
+        RUC: d.ruc,
+        'Razón Social': d.razonSocial,
         Tipo: d.tipo,
         Nombre: d.nombre,
         Cargo: d.cargo,
