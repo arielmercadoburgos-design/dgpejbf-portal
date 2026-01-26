@@ -1,0 +1,114 @@
+package dgpejbf.portal.web.rest;
+
+import dgpejbf.portal.service.BfRaActualService;
+import dgpejbf.portal.service.dto.secundaria.BfRaActualDTO;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import java.nio.charset.StandardCharsets;
+
+@RestController
+@RequestMapping("/api/bf-ra-actual")
+public class BfRaActualResource {
+
+    private final BfRaActualService service;
+
+    public BfRaActualResource(BfRaActualService service) {
+        this.service = service;
+    }
+
+    /**
+     * Buscar con filtros dinámicos y paginación
+     */
+    @GetMapping("/buscar")
+    public Page<BfRaActualDTO> buscar(
+        @RequestParam(required = false) String ruc,
+        @RequestParam(required = false) String razonSocial,
+        @RequestParam(required = false) String tipo,
+        Pageable pageable
+    ) {
+        return service.buscar(ruc, razonSocial, tipo, pageable);
+    }
+
+    /**
+     * Exportar todos los registros filtrados (sin paginación)
+     */
+    @GetMapping("/export")
+    public List<BfRaActualDTO> exportAll(
+        @RequestParam(required = false) String ruc,
+        @RequestParam(required = false) String razonSocial,
+        @RequestParam(required = false) String tipo
+    ) {
+        Integer rucAsInteger = null;
+        if (ruc != null && !ruc.isEmpty()) {
+            try {
+                rucAsInteger = Integer.valueOf(ruc);
+            } catch (NumberFormatException e) {
+                // Se mantiene null si no se puede parsear
+            }
+        }
+
+        return service.exportAll(razonSocial, tipo, rucAsInteger);
+    }
+
+    /**
+     * Exportar CSV
+     */
+    @GetMapping("/export-csv")
+    public ResponseEntity<Resource> exportCSV(
+        @RequestParam(required = false) String ruc,
+        @RequestParam(required = false) String razonSocial,
+        @RequestParam(required = false) String tipo
+    ) {
+        Integer rucAsInteger = null;
+        if (ruc != null && !ruc.isEmpty()) {
+            try {
+                rucAsInteger = Integer.valueOf(ruc);
+            } catch (NumberFormatException e) {
+                // Manejo silencioso
+            }
+        }
+
+        List<BfRaActualDTO> datos = service.exportAll(razonSocial, tipo, rucAsInteger);
+
+        StringBuilder csv = new StringBuilder();
+        // Cabeceras (ajustar según los campos de BfRaActualDTO)
+        csv.append("RUC;Razon Social;Tipo\n");
+
+        for (BfRaActualDTO dto : datos) {
+            csv.append(dto.getRuc() != null ? dto.getRuc() : "").append(";")
+               .append(dto.getRazonSocial() != null ? dto.getRazonSocial() : "").append(";")
+               .append(dto.getTipo() != null ? dto.getTipo() : "").append("\n");
+        }
+
+        byte[] csvBytes = csv.toString().getBytes(StandardCharsets.UTF_8);
+        ByteArrayResource resource = new ByteArrayResource(csvBytes);
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=bf_ra_actual_export.csv")
+            .contentType(MediaType.parseMediaType("text/csv"))
+            .body(resource);
+    }
+
+    /**
+     * Obtener un registro por ID
+     */
+    @GetMapping("/{id}")
+    public BfRaActualDTO findOne(@PathVariable Long id) {
+        return service.findOne(id);
+    }
+
+    /**
+     * Obtener todos los registros sin filtros (si lo necesitás)
+     */
+    @GetMapping("/all")
+    public List<BfRaActualDTO> findAll() {
+        return service.findAll();
+    }
+}

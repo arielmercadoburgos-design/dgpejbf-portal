@@ -1,9 +1,8 @@
 package dgpejbf.portal.service.dto.secundaria;
 
-import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDate;
 
-public class BfRaActualDTO implements Serializable {
+public class BfRaActualDTO {
 
     private Integer id;
     private Integer ruc;
@@ -12,7 +11,7 @@ public class BfRaActualDTO implements Serializable {
     private String tipo;
     private Integer tramiteId;
     private String tipoComunicacion;
-    private Instant fechaComunicacion;
+    private LocalDate fechaComunicacion;
 
     // Getters y Setters
 
@@ -72,11 +71,11 @@ public class BfRaActualDTO implements Serializable {
         this.tipoComunicacion = tipoComunicacion;
     }
 
-    public Instant getFechaComunicacion() {
+    public LocalDate getFechaComunicacion() {
         return fechaComunicacion;
     }
 
-    public void setFechaComunicacion(Instant fechaComunicacion) {
+    public void setFechaComunicacion(LocalDate fechaComunicacion) {
         this.fechaComunicacion = fechaComunicacion;
     }
 }

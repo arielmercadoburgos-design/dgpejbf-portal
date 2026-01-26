@@ -45,6 +45,12 @@ const routes: Routes = [
     loadComponent: () => import('./entities/dashboard/dashboard.component').then(m => m.DashboardComponent),
     title: 'Portal de datos',
   },
+  // 📁 RUta grilla beneficiarios finales
+  {
+    path: 'bf-ra-actual',
+    loadComponent: () => import('./entities/bf-ra-actual/bf-ra-actual-list.component').then(m => m.BfRaActualListComponent),
+    data: { pageTitle: 'Beneficiarios Finales' },
+  },
   // 📁 RUta entidades (grilla portal de datos)
   {
     path: '',

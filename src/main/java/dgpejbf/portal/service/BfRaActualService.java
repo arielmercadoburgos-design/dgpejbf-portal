@@ -4,47 +4,92 @@ import dgpejbf.portal.domain.secundaria.BfRaActual;
 import dgpejbf.portal.repository.secundaria.BfRaActualRepository;
 import dgpejbf.portal.service.dto.secundaria.BfRaActualDTO;
 import dgpejbf.portal.service.mapper.secundaria.BfRaActualMapper;
+import jakarta.persistence.criteria.Predicate;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional(readOnly = true)
 public class BfRaActualService {
 
-    private final BfRaActualRepository bfRaActualRepository;
-    private final BfRaActualMapper bfRaActualMapper;
+    private final BfRaActualRepository repository;
+    private final BfRaActualMapper mapper;
 
-    public BfRaActualService(BfRaActualRepository bfRaActualRepository,
-                             BfRaActualMapper bfRaActualMapper) {
-        this.bfRaActualRepository = bfRaActualRepository;
-        this.bfRaActualMapper = bfRaActualMapper;
+    public BfRaActualService(BfRaActualRepository repository, BfRaActualMapper mapper) {
+        this.repository = repository;
+        this.mapper = mapper;
+    }
+
+    private Specification<BfRaActual> buildSpecification(String razonSocial, String tipo, Integer ruc) {
+        return (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
+
+            // Filtro por RUC
+            if (ruc != null) {
+                predicates.add(cb.equal(root.get("ruc"), ruc));
+            }
+
+            // Filtro por RazonSocial y Tipo combinados
+            if ((razonSocial != null && !razonSocial.isBlank()) ||
+                (tipo != null && !tipo.isBlank())) {
+
+                String valor = razonSocial != null && !razonSocial.isBlank()
+                        ? razonSocial.toLowerCase()
+                        : tipo.toLowerCase();
+
+                Predicate razonSocialLike =
+                        cb.like(cb.lower(root.get("razonSocial")), "%" + valor + "%");
+
+                Predicate tipoLike =
+                        cb.like(cb.lower(root.get("tipo")), "%" + valor + "%");
+
+                predicates.add(cb.or(razonSocialLike, tipoLike));
+            }
+
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
     }
 
     /**
-     * Buscar Beneficiarios Finales con filtros opcionales y paginación
+     * Buscar con filtros dinámicos y paginación
      */
-    public Page<BfRaActualDTO> buscar(Integer ruc, String razonSocial, String tipoComunicacion, Pageable pageable) {
-        Page<BfRaActual> page = bfRaActualRepository.buscar(ruc, razonSocial, tipoComunicacion, pageable);
-        return page.map(bfRaActualMapper::toDto);
+    public Page<BfRaActualDTO> buscar(String ruc, String razonSocial, String tipo, Pageable pageable) {
+        Integer rucAsInteger = null;
+        if (ruc != null && !ruc.isBlank()) {
+            try {
+                rucAsInteger = Integer.valueOf(ruc);
+            } catch (NumberFormatException e) {
+                // Si falla, se mantiene null
+            }
+        }
+
+        Specification<BfRaActual> spec = buildSpecification(razonSocial, tipo, rucAsInteger);
+        return repository.findAll(spec, pageable).map(mapper::toDto);
     }
 
     /**
-     * Traer un Beneficiario Final por ID (opcional)
+     * Exportar todos los datos filtrados (sin paginación)
      */
-    public BfRaActualDTO findOne(Integer id) {
-        return bfRaActualRepository.findById(id)
-                .map(bfRaActualMapper::toDto)
-                .orElse(null);
+    public List<BfRaActualDTO> exportAll(String razonSocial, String tipo, Integer ruc) {
+        Specification<BfRaActual> spec = buildSpecification(razonSocial, tipo, ruc);
+        List<BfRaActual> results = repository.findAll(spec);
+        return results.stream().map(mapper::toDto).toList();
     }
 
     /**
-     * Traer todos los Beneficiarios Finales (por ruc) para export
+     * Obtener un registro por ID
      */
-    public java.util.List<BfRaActualDTO> findAllByRuc(Integer ruc) {
-        return bfRaActualRepository.buscar(ruc, null, null, Pageable.unpaged())
-                .map(bfRaActualMapper::toDto)
-                .getContent();
+    public BfRaActualDTO findOne(Long id) {
+        return repository.findById(id).map(mapper::toDto).orElse(null);
+    }
+
+    /**
+     * Obtener todos los registros sin filtros
+     */
+    public List<BfRaActualDTO> findAll() {
+        return repository.findAll().stream().map(mapper::toDto).toList();
     }
 }

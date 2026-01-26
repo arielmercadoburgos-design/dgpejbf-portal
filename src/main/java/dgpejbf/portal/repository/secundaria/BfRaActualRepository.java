@@ -4,22 +4,20 @@ import dgpejbf.portal.domain.secundaria.BfRaActual;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.stereotype.Repository;
 
-public interface BfRaActualRepository extends JpaRepository<BfRaActual, Integer> {
+import java.time.LocalDateTime;
 
-    // Método de búsqueda con filtros opcionales (igual que PejRaActual)
-    @Query("""
-        SELECT b FROM BfRaActual b
-        WHERE (:ruc IS NULL OR b.ruc = :ruc)
-          AND (:razonSocial IS NULL OR LOWER(b.razonSocial) LIKE LOWER(CONCAT('%', :razonSocial, '%')))
-          AND (:tipoComunicacion IS NULL OR b.tipoComunicacion = :tipoComunicacion)
-    """)
-    Page<BfRaActual> buscar(
-        @Param("ruc") Integer ruc,
-        @Param("razonSocial") String razonSocial,
-        @Param("tipoComunicacion") String tipoComunicacion,
-        Pageable pageable
-    );
+@Repository
+public interface BfRaActualRepository extends JpaRepository<BfRaActual, Long>, JpaSpecificationExecutor<BfRaActual> {
+
+    Page<BfRaActual> findByRuc(Integer ruc, Pageable pageable);
+
+    Page<BfRaActual> findByRazonSocialContainingIgnoreCase(String razonSocial, Pageable pageable);
+
+    Page<BfRaActual> findByTipoIgnoreCase(String tipo, Pageable pageable);
+
+    Page<BfRaActual> findByFechaComunicacionBetween(LocalDateTime desde, LocalDateTime hasta, Pageable pageable);
+
 }

@@ -1,25 +1,15 @@
 package dgpejbf.portal.domain.secundaria;
 
 import jakarta.persistence.*;
-import java.io.Serializable;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "bf_ra_actual", schema = "portal_dgpejbf")
-public class BfRaActual implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class BfRaActual {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "bf_ra_actual_seq")
-    @SequenceGenerator(
-        name = "bf_ra_actual_seq",
-        sequenceName = "bf_ra_actual_tabla_id_seq",
-        schema = "portal_dgpejbf",
-        allocationSize = 1
-    )
     @Column(name = "tabla_id")
-    private Integer id;
+    private Integer tablaId;
 
     @Column(name = "ruc")
     private Integer ruc;
@@ -40,16 +30,16 @@ public class BfRaActual implements Serializable {
     private String tipoComunicacion;
 
     @Column(name = "fecha_comunicacion")
-    private Instant fechaComunicacion;
+    private LocalDateTime fechaComunicacion;
 
     // getters y setters
 
     public Integer getId() {
-        return id;
+        return tablaId;
     }
 
     public void setId(Integer id) {
-        this.id = id;
+        this.tablaId = id;
     }
 
     public Integer getRuc() {
@@ -100,11 +90,11 @@ public class BfRaActual implements Serializable {
         this.tipoComunicacion = tipoComunicacion;
     }
 
-    public Instant getFechaComunicacion() {
+    public LocalDateTime getFechaComunicacion() {
         return fechaComunicacion;
     }
 
-    public void setFechaComunicacion(Instant fechaComunicacion) {
+    public void setFechaComunicacion(LocalDateTime fechaComunicacion) {
         this.fechaComunicacion = fechaComunicacion;
     }
 }

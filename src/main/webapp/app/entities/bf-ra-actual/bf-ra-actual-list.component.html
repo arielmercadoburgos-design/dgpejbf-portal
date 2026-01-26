@@ -1,0 +1,120 @@
+<div class="card shadow-lg border-0 rounded-3 m-4">
+  <div class="card-header bg-success text-white">
+    <h4 class="mb-0">Registro de Beneficiarios Finales</h4>
+
+    <div class="mt-3 d-flex gap-2">
+      <button class="btn btn-light btn-sm" (click)="exportToExcelAll()">Exportar .xls</button>
+      <button class="btn btn-light btn-sm" (click)="exportarCSV()">Exportar .csv</button>
+    </div>
+  </div>
+
+  <div class="card-body p-4">
+    <!-- 🔍 Buscador -->
+    <div class="row mb-4">
+      <div class="col-md-12">
+        <div class="input-group input-group-lg shadow-sm">
+          <span class="input-group-text bg-white border-end-0">
+            <i class="fa fa-search text-muted"></i>
+          </span>
+          <input
+            type="text"
+            class="form-control border-start-0 ps-0"
+            placeholder="Buscar por RUC o Razón Social y presione Enter..."
+            [(ngModel)]="busqueda"
+            (keyup.enter)="buscar()"
+          />
+          <button class="btn btn-primary px-4" (click)="buscar()" [disabled]="loading()">
+            {{ loading() ? 'Buscando...' : 'Buscar' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⏳ Loading -->
+    <div *ngIf="loading()" class="text-center my-5">
+      <div class="spinner-border text-primary" role="status"></div>
+      <p class="text-muted mt-2">Consultando base de datos...</p>
+    </div>
+
+    <!-- 📊 Tabla -->
+    <div class="table-responsive shadow-sm rounded" *ngIf="!loading() && itemsFiltrados().length > 0">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="thead-azul">
+          <tr>
+            <th class="text-start">RUC</th>
+            <th class="text-center">DV</th>
+            <th class="text-start">RAZÓN SOCIAL</th>
+            <th class="text-start">TIPO</th>
+            <th class="text-start">COMUNICACIÓN</th>
+            <th class="text-end">FECHA</th>
+            <th class="text-center" style="width: 140px">ACCIÓN</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let item of itemsFiltrados()">
+            <td class="fw-bold text-primary text-start">{{ item.ruc }}</td>
+            <td class="text-center text-muted">{{ item.dv }}</td>
+            <td class="text-start">{{ item.razonSocial }}</td>
+            <td class="text-start text-secondary fw-medium">{{ item.tipo }}</td>
+            <td class="text-start">{{ item.tipoComunicacion }}</td>
+            <td class="text-end small">
+              {{ item.fechaComunicacion | date: 'dd/MM/yyyy HH:mm' }}
+            </td>
+            <td class="text-center">
+              <button class="btn btn-sm btn-outline-primary" (click)="verDetalle(item)" title="Ver Detalle">
+                <i class="fa fa-eye me-1"></i> Detalle
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 📄 Paginación -->
+    <div *ngIf="!loading() && totalItemsCount() > 0" class="d-flex flex-column flex-md-row justify-content-between align-items-center mt-4">
+      <div class="text-muted small mb-3 mb-md-0">
+        Mostrando <strong>{{ itemsFiltrados().length }}</strong> de <strong>{{ totalItemsCount() }}</strong> registros
+      </div>
+
+      <nav *ngIf="totalItemsCount() > size">
+        <ul class="pagination pagination-sm mb-0">
+          <li class="page-item" [class.disabled]="page === 0">
+            <button class="page-link" (click)="goToPage(0)">&laquo;&laquo;</button>
+          </li>
+
+          <li class="page-item" [class.disabled]="page === 0">
+            <button class="page-link" (click)="goToPage(page - 1)">Anterior</button>
+          </li>
+
+          <li class="page-item disabled" *ngIf="getPages().length > 0 && getPages()[0] > 0">
+            <span class="page-link">...</span>
+          </li>
+
+          <li class="page-item" *ngFor="let p of getPages()" [class.active]="p === page">
+            <button class="page-link" (click)="goToPage(p)">{{ p + 1 }}</button>
+          </li>
+
+          <li class="page-item disabled" *ngIf="getPages().length > 0 && getPages()[getPages().length - 1] < getTotalPages() - 1">
+            <span class="page-link">...</span>
+          </li>
+
+          <li class="page-item" [class.disabled]="page + 1 >= getTotalPages()">
+            <button class="page-link" (click)="goToPage(page + 1)">Siguiente</button>
+          </li>
+
+          <li class="page-item" [class.disabled]="page + 1 >= getTotalPages()">
+            <button class="page-link" (click)="goToPage(getTotalPages() - 1)">&raquo;&raquo;</button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- ⚠️ Sin resultados -->
+    <div *ngIf="!loading() && itemsFiltrados().length === 0" class="alert alert-warning text-center mt-3 border-0 shadow-sm">
+      <i class="fa fa-info-circle me-2"></i>
+      No se encontraron resultados para "<strong>{{ busqueda }}</strong
+      >".
+    </div>
+  </div>
+</div>

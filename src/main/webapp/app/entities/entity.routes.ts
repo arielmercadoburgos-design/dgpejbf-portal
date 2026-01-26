@@ -12,6 +12,7 @@ const routes: Routes = [
     data: { pageTitle: 'Portal de Datos' },
     loadChildren: () => import('./dashboard/dashboard.routes'),
   },
+
   {
     path: 'pej-ra-actual',
     data: { pageTitle: 'Registros Administrativos' },
@@ -37,11 +38,6 @@ const routes: Routes = [
       pageTitle: 'Detalle de Socios',
     },
   },
-  {
-    path: 'hola',
-    loadComponent: () => import('./pej-ra-actual/list/pej-ra-actual-list.component').then(m => m.PejRaActualListComponent),
-  },
-  /* jhipster-needle-add-entity-route - JHipster will add entity modules routes here */
 ];
 
 export default routes;
