@@ -5,6 +5,8 @@ import { HttpResponse } from '@angular/common/http';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import SharedModule from 'app/shared/shared.module';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 import { BfRaActualService, IBfRaActual, IPage } from './bf-ra-actual.service';
 
@@ -156,13 +158,30 @@ export class BfRaActualListComponent implements OnInit {
   exportarCSV(): void {
     const valor = this.busqueda.trim();
     const filtros: any = {};
-
     if (valor !== '') {
-      if (!isNaN(Number(valor))) filtros['ruc'] = valor;
-      else {
+      if (!isNaN(Number(valor))) {
+        filtros['ruc'] = valor;
+      } else {
         filtros['razonSocial'] = valor;
         filtros['tipo'] = valor;
       }
     }
+    this.bfRaActualService.exportToCsv(filtros).subscribe({
+      // Sintaxis corregida (Method Shorthand)
+      next(blob: Blob) {
+        const fileName = `reporte_${new Date().getTime()}.csv`;
+        saveAs(blob, fileName);
+      },
+      error(error) {
+        console.error('Error al exportar CSV', error);
+      },
+    });
+  }
+  private exportDataToExcelFile(data: IBfRaActual[], fileName: string): void {
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
+    const workbook: XLSX.WorkBook = { Sheets: { Datos: worksheet }, SheetNames: ['Datos'] };
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+    const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(blob, fileName);
   }
 }
