@@ -6,8 +6,6 @@ import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
 public interface BfRaActualDetalleMapper {
-
     BfRaActualDetalleDTO toDto(BfRaActualDetalle entity);
-
     BfRaActualDetalle toEntity(BfRaActualDetalleDTO dto);
 }

@@ -59,7 +59,7 @@
             <td class="text-start text-secondary fw-medium">{{ item.tipo }}</td>
             <td class="text-start">{{ item.tipoComunicacion }}</td>
             <td class="text-end small">
-              {{ item.fechaComunicacion | date: 'dd/MM/yyyy HH:mm' }}
+              {{ item.fechaComunicacion | date: 'dd/MM/yyyy' }}
             </td>
             <td class="text-center">
               <button class="btn btn-sm btn-outline-primary" (click)="verDetalle(item)" title="Ver Detalle">

@@ -1,7 +1,7 @@
 package dgpejbf.portal.service.dto.secundaria;
 
 import java.io.Serializable;
-import java.time.Instant;
+import java.util.Date;
 
 public class BfRaActualDetalleDTO implements Serializable {
 
@@ -18,7 +18,7 @@ public class BfRaActualDetalleDTO implements Serializable {
     private String fecNac;
     private String profesionOcupacion;
     private String condicion;
-    private String participacion;
+    private String participacion;    
     private String derechoVotacion;
     private String info;
     private String control;
@@ -26,7 +26,7 @@ public class BfRaActualDetalleDTO implements Serializable {
     private String idPais;
     private String nacPais;
     private Integer tramiteId;
-    private Instant fechaComunicacion;
+    private Date fechaComunicacion;
 
     // Getters y Setters
 
@@ -198,11 +198,11 @@ public class BfRaActualDetalleDTO implements Serializable {
         this.tramiteId = tramiteId;
     }
 
-    public Instant getFechaComunicacion() {
+    public Date getFechaComunicacion() {
         return fechaComunicacion;
     }
 
-    public void setFechaComunicacion(Instant fechaComunicacion) {
+    public void setFechaComunicacion(Date fechaComunicacion) {
         this.fechaComunicacion = fechaComunicacion;
     }
 }

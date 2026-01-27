@@ -85,7 +85,7 @@ export class BfRaActualListComponent implements OnInit {
   verDetalle(item: IBfRaActual): void {
     const ruc = item.ruc;
     if (ruc) {
-      this.router.navigate(['/bf-ra-actual', ruc, 'detalle'], {
+      this.router.navigate(['detalle', ruc], {
         queryParams: {
           razonSocial: item.razonSocial ?? '',
           tipo: item.tipo ?? '',

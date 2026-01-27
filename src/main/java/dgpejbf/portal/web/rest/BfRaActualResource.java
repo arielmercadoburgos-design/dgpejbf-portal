@@ -2,6 +2,8 @@ package dgpejbf.portal.web.rest;
 
 import dgpejbf.portal.service.BfRaActualService;
 import dgpejbf.portal.service.dto.secundaria.BfRaActualDTO;
+import dgpejbf.portal.service.dto.secundaria.BfRaActualDetalleDTO;
+
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -11,16 +13,21 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.nio.charset.StandardCharsets;
 
 @RestController
 @RequestMapping("/api/bf-ra-actual")
+
 public class BfRaActualResource {
 
+    private final Logger log = LoggerFactory.getLogger(BfRaActualResource.class);
     private final BfRaActualService service;
 
     public BfRaActualResource(BfRaActualService service) {
-        this.service = service;
+        this.service = service;       
     }
 
     /**
@@ -56,7 +63,14 @@ public class BfRaActualResource {
 
         return service.exportAll(razonSocial, tipo, rucAsInteger);
     }
-
+    
+    @GetMapping("/detalles")
+    public ResponseEntity<List<BfRaActualDetalleDTO>> getDetalles(@RequestParam String ruc) {
+        log.debug("Solicitud REST para obtener BfRaActualDetalles por RUC: {}", ruc);
+    // Usamos el método que creamos en el service
+        List<BfRaActualDetalleDTO> detalles = service.buscarDetallesPorRuc(ruc);
+        return ResponseEntity.ok().body(detalles);
+}
     /**
      * Exportar CSV
      */

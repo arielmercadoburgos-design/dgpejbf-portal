@@ -1,5 +1,5 @@
 package dgpejbf.portal.service.dto.secundaria;
-
+import java.util.List;
 import java.time.LocalDate;
 
 public class BfRaActualDTO {
@@ -12,6 +12,7 @@ public class BfRaActualDTO {
     private Integer tramiteId;
     private String tipoComunicacion;
     private LocalDate fechaComunicacion;
+    private List<BfRaActualDetalleDTO> detalles;
 
     // Getters y Setters
 
@@ -77,5 +78,12 @@ public class BfRaActualDTO {
 
     public void setFechaComunicacion(LocalDate fechaComunicacion) {
         this.fechaComunicacion = fechaComunicacion;
+    }
+    
+    public void setDetalles(List<BfRaActualDetalleDTO> detalles) {
+        this.detalles = detalles;
+    }
+    public List<BfRaActualDetalleDTO> getDetalles() {
+        return detalles;
     }
 }

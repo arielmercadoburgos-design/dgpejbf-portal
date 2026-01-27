@@ -38,6 +38,15 @@ const routes: Routes = [
       pageTitle: 'Detalle de Socios',
     },
   },
+  {
+    path: 'detalle/:ruc',
+    loadComponent: () => import('./bf-ra-actual-detalle/bf-ra-actual-detalle.component').then(m => m.BfRaActualDetalleComponent),
+    canActivate: [UserRouteAccessService],
+    data: {
+      authorities: ['ROLE_USER', 'ROLE_ADMIN'],
+      pageTitle: 'Detalle de Beneficiarios Finales',
+    },
+  },
 ];
 
 export default routes;

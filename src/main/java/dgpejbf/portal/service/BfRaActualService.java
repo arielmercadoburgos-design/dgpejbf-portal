@@ -1,8 +1,11 @@
 package dgpejbf.portal.service;
 
 import dgpejbf.portal.domain.secundaria.BfRaActual;
+import dgpejbf.portal.repository.secundaria.BfRaActualDetalleRepository;
 import dgpejbf.portal.repository.secundaria.BfRaActualRepository;
 import dgpejbf.portal.service.dto.secundaria.BfRaActualDTO;
+import dgpejbf.portal.service.dto.secundaria.BfRaActualDetalleDTO;
+import dgpejbf.portal.service.mapper.secundaria.BfRaActualDetalleMapper;
 import dgpejbf.portal.service.mapper.secundaria.BfRaActualMapper;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -17,10 +20,19 @@ public class BfRaActualService {
 
     private final BfRaActualRepository repository;
     private final BfRaActualMapper mapper;
+    private final BfRaActualDetalleRepository detallesRepository;
+    private final BfRaActualDetalleMapper detalleMapper;
 
-    public BfRaActualService(BfRaActualRepository repository, BfRaActualMapper mapper) {
+    public BfRaActualService(
+        BfRaActualRepository repository,
+        BfRaActualMapper mapper,
+        BfRaActualDetalleRepository detallesRepository,
+        BfRaActualDetalleMapper detalleMapper
+    ) {
         this.repository = repository;
         this.mapper = mapper;
+        this.detallesRepository = detallesRepository;
+        this.detalleMapper = detalleMapper;
     }
 
     private Specification<BfRaActual> buildSpecification(String razonSocial, String tipo, Integer ruc) {
@@ -33,18 +45,12 @@ public class BfRaActualService {
             }
 
             // Filtro por RazonSocial y Tipo combinados
-            if ((razonSocial != null && !razonSocial.isBlank()) ||
-                (tipo != null && !tipo.isBlank())) {
+            if ((razonSocial != null && !razonSocial.isBlank()) || (tipo != null && !tipo.isBlank())) {
+                String valor = razonSocial != null && !razonSocial.isBlank() ? razonSocial.toLowerCase() : tipo.toLowerCase();
 
-                String valor = razonSocial != null && !razonSocial.isBlank()
-                        ? razonSocial.toLowerCase()
-                        : tipo.toLowerCase();
+                Predicate razonSocialLike = cb.like(cb.lower(root.get("razonSocial")), "%" + valor + "%");
 
-                Predicate razonSocialLike =
-                        cb.like(cb.lower(root.get("razonSocial")), "%" + valor + "%");
-
-                Predicate tipoLike =
-                        cb.like(cb.lower(root.get("tipo")), "%" + valor + "%");
+                Predicate tipoLike = cb.like(cb.lower(root.get("tipo")), "%" + valor + "%");
 
                 predicates.add(cb.or(razonSocialLike, tipoLike));
             }
@@ -67,7 +73,34 @@ public class BfRaActualService {
         }
 
         Specification<BfRaActual> spec = buildSpecification(razonSocial, tipo, rucAsInteger);
-        return repository.findAll(spec, pageable).map(mapper::toDto);
+
+        // 1. Obtenemos la página de cabeceras
+        Page<BfRaActualDTO> pagina = repository.findAll(spec, pageable).map(mapper::toDto);
+
+        // 2. 🚀 ESTO ES LO QUE TE FALTA: Llenar cada cabecera con sus detalles
+        pagina.forEach(dto -> {
+            if (dto.getRuc() != null) {
+                // Llamamos al método que ya tienes abajo para traer los detalles
+                List<BfRaActualDetalleDTO> detalles = this.buscarDetallesPorRuc(dto.getRuc().toString());
+                dto.setDetalles(detalles);
+            }
+        });
+
+        return pagina; // Ahora la página va con los datos completos
+    }
+
+    public List<BfRaActualDetalleDTO> buscarDetallesPorRuc(String ruc) {
+        Integer rucAsInteger = null;
+        if (ruc != null && !ruc.isBlank()) {
+            try {
+                rucAsInteger = Integer.valueOf(ruc);
+            } catch (NumberFormatException e) {
+                return new ArrayList<>(); // Si el RUC es inválido, devuelve lista vacía
+            }
+        }
+
+        // Usamos el repositorio de detalles para traer la lista de personas/items
+        return detallesRepository.findByRuc(rucAsInteger).stream().map(detalleMapper::toDto).toList();
     }
 
     /**

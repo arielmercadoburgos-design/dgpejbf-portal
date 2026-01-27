@@ -124,6 +124,7 @@ export class BfRaActualService {
 
   // 👁️ Traer detalle por RUC
   getDetalleByRuc(ruc: number | string): Observable<IBfRaActualDetalle[]> {
-    return this.http.get<IBfRaActualDetalle[]>(`${this.resourceUrl}/detalle/${ruc}`);
+    const params = { ruc: ruc.toString() };
+    return this.http.get<IBfRaActualDetalle[]>(`${this.resourceUrl}/detalles`, { params });
   }
 }
