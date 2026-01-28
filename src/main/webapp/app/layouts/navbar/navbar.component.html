@@ -156,19 +156,25 @@
           [routerLinkActiveOptions]="{ exact: true }"
         >
           @let accountRef = account();
-          <a class="nav-link dropdown-toggle" ngbDropdownToggle href="javascript:void(0);" id="account-menu" data-cy="accountMenu">
+
+          <a
+            class="nav-link dropdown-toggle d-flex align-items-center gap-1"
+            ngbDropdownToggle
+            href="javascript:void(0);"
+            id="account-menu"
+            data-cy="accountMenu"
+          >
             @if (!accountRef?.imageUrl) {
-              <span>
-                <fa-icon icon="user"></fa-icon>
-                <span jhiTranslate="global.menu.account.main">Cuenta</span>
-              </span>
+              <fa-icon icon="user"></fa-icon>
+
+              <!-- Texto visible solo en desktop -->
+              <span class="d-none d-md-inline"> Bienvenido/a {{ accountRef?.firstName || accountRef?.login }} </span>
             } @else {
-              <span>
-                <img [src]="accountRef!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
-              </span>
+              <img [src]="accountRef!.imageUrl" class="profile-image rounded-circle" alt="Avatar" />
             }
           </a>
-          <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="account-menu">
+
+          <ul class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="account-menu">
             @if (accountRef !== null) {
               <li>
                 <a
@@ -179,9 +185,10 @@
                   data-cy="settings"
                 >
                   <fa-icon icon="wrench" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.settings">Ajustes</span>
+                  Ajustes
                 </a>
               </li>
+
               <li>
                 <a
                   class="dropdown-item"
@@ -191,20 +198,21 @@
                   data-cy="passwordItem"
                 >
                   <fa-icon icon="lock" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.password">Contraseña</span>
+                  Contraseña
                 </a>
               </li>
+
               <li>
                 <a class="dropdown-item" (click)="logout()" id="logout" data-cy="logout">
                   <fa-icon icon="sign-out-alt" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.logout">Cerrar la sesión</span>
+                  Cerrar sesión
                 </a>
               </li>
             } @else {
               <li>
                 <a class="dropdown-item" (click)="login()" id="login" data-cy="login">
                   <fa-icon icon="sign-in-alt" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="global.menu.account.login">Iniciar sesión</span>
+                  Iniciar sesión
                 </a>
               </li>
             }

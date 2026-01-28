@@ -55,7 +55,7 @@ import { HttpResponse } from '@angular/common/http';
 
               <tbody>
                 <tr *ngFor="let b of beneficiarios()">
-                  <td class="fw-bold">{{ b.nombre }}</td>
+                  <td>{{ b.nombre }}</td>
                   <td>{{ b.condicion }}</td>
                   <td class="text-end">{{ b.nacionalidad }}</td>
                   <td class="text-end">{{ b.cedula }}</td>
