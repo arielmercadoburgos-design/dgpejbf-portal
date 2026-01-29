@@ -135,7 +135,6 @@ export class BfRaActualDetalleComponent implements OnInit {
       'Razón Social': this.razonSocial(),
       'Nombre y Apellido': b.nombre,
       Cédula: b.cedula,
-      Nacionalidad: b.nacionalidad,
       Condición: b.condicion,
       Participación: b.participacion,
       Control: b.control,
