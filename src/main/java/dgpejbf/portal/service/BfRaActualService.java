@@ -10,6 +10,8 @@ import dgpejbf.portal.service.mapper.secundaria.BfRaActualMapper;
 import jakarta.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.Map;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -78,15 +80,25 @@ public class BfRaActualService {
         Page<BfRaActualDTO> pagina = repository.findAll(spec, pageable).map(mapper::toDto);
 
         // 2. 🚀 ESTO ES LO QUE TE FALTA: Llenar cada cabecera con sus detalles
-        pagina.forEach(dto -> {
-            if (dto.getRuc() != null) {
-                // Llamamos al método que ya tienes abajo para traer los detalles
-                List<BfRaActualDetalleDTO> detalles = this.buscarDetallesPorRuc(dto.getRuc().toString());
-                dto.setDetalles(detalles);
-            }
-        });
+        // 2️⃣ Traemos todos los RUC de la página
+    List<Integer> rucs = pagina.stream()
+        .map(BfRaActualDTO::getRuc)
+        .filter(r -> r != null)
+        .toList();
 
-        return pagina; // Ahora la página va con los datos completos
+    if (!rucs.isEmpty()) {
+        // 3️⃣ Traemos todos los detalles de una sola vez usando el nuevo método
+        Map<Integer, List<BfRaActualDetalleDTO>> detallesPorRuc = detallesRepository
+            .findByRucIn(rucs)
+            .stream()
+            .map(detalleMapper::toDto)
+            .collect(Collectors.groupingBy(BfRaActualDetalleDTO::getRuc));
+
+        // 4️⃣ Asignamos los detalles a cada cabecera
+        pagina.forEach(dto -> dto.setDetalles(detallesPorRuc.getOrDefault(dto.getRuc(), List.of())));
+    }
+
+    return pagina;// Ahora la página va con los datos completos
     }
 
     public List<BfRaActualDetalleDTO> buscarDetallesPorRuc(String ruc) {

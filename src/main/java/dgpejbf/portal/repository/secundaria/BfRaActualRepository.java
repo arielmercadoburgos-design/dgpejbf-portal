@@ -17,6 +17,7 @@ public interface BfRaActualRepository extends JpaRepository<BfRaActual, Long>, J
     Page<BfRaActual> findByRazonSocialContainingIgnoreCase(String razonSocial, Pageable pageable);
 
     Page<BfRaActual> findByTipoIgnoreCase(String tipo, Pageable pageable);
+    
 
     Page<BfRaActual> findByFechaComunicacionBetween(LocalDateTime desde, LocalDateTime hasta, Pageable pageable);
 

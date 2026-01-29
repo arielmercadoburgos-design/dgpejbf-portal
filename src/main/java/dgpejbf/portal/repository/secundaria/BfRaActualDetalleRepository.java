@@ -15,11 +15,13 @@ public interface BfRaActualDetalleRepository extends JpaRepository<BfRaActualDet
     // ✅ Buscar integrantes por RUC (útil para ver quiénes componen la sociedad actual)
     List<BfRaActualDetalle> findByRuc(Integer ruc);
 
-    // ✅ Buscar por Trámite ID (esencial para la grilla de detalles de una comunicación específica)
-    List<BfRaActualDetalle> findByTramiteId(Integer tramiteId);
-    
+    // Buscar varios RUCs de golpe (nuevo)
+    List<BfRaActualDetalle> findByRucIn(List<Integer> rucs);
 
-    // ✅ Buscar por Cédula (específico para encontrar personas físicas)
+    // Buscar por Trámite ID (existente)
+    List<BfRaActualDetalle> findByTramiteId(Integer tramiteId);
+
+    // Buscar por Cédula (existente)
     Page<BfRaActualDetalle> findByCedula(String cedula, Pageable pageable);
 
 }
