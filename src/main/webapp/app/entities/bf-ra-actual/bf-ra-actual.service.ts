@@ -55,7 +55,7 @@ export interface IBfRaActualDetalle {
   idPais?: string;
   nacPais?: string;
   tramiteId?: number;
-  fechaComunicacion?: Date;
+  fechaComunicacion?: string;
 }
 
 @Injectable({ providedIn: 'root' })

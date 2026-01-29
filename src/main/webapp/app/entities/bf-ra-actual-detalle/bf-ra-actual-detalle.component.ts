@@ -4,7 +4,8 @@ import { ActivatedRoute, RouterModule } from '@angular/router'; // Agregado Rout
 import { IBfRaActualDetalle } from './bf-ra-actual-detalle.model';
 import { BfRaActualService } from '../bf-ra-actual/bf-ra-actual.service';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { HttpResponse } from '@angular/common/http';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'jhi-bf-ra-actual-detalle',
@@ -47,7 +48,6 @@ import { HttpResponse } from '@angular/common/http';
                 <tr>
                   <th>Nombre y Apellido</th>
                   <th>Condición</th>
-                  <th class="text-end">Nacionalidad</th>
                   <th class="text-end">Documento</th>
                   <th class="text-center">Fecha de Asunción</th>
                 </tr>
@@ -56,8 +56,7 @@ import { HttpResponse } from '@angular/common/http';
               <tbody>
                 <tr *ngFor="let b of beneficiarios()">
                   <td class="fw-bold">{{ b.nombre }}</td>
-                  <td>{{ b.condicion }}</td>
-                  <td class="text-end">{{ b.nacionalidad }}</td>
+                  <td class="text-end">{{ b.condicion }}</td>
                   <td class="text-end">{{ b.cedula }}</td>
                   <td class="text-center">{{ b.fechaComunicacion }}</td>
                 </tr>
@@ -102,11 +101,6 @@ export class BfRaActualDetalleComponent implements OnInit {
     }
   }
 
-  ejecutarExport(formato: 'csv' | 'xls'): void {
-    // Aquí emitimos 'csv' o 'xlsx' hacia el padre
-    this.Export.emit(formato);
-  }
-
   cargarBeneficiarios(): void {
     this.loading.set(true);
     const rucBusqueda = this.ruc();
@@ -118,8 +112,9 @@ export class BfRaActualDetalleComponent implements OnInit {
           const beneficiariosMapeados = res.map(b => ({
             nombre: b.nombre,
             cedula: b.cedula,
-            nacionalidad: b.nacionalidad,
             condicion: b.condicion, // del backend
+            participacion: b.participacion,
+            control: b.control,
             fechaComunicacion: b.fechaComunicacion ? new Date(b.fechaComunicacion).toLocaleDateString() : '',
             // si quieres otros campos, agregalos aquí
           }));
@@ -133,5 +128,44 @@ export class BfRaActualDetalleComponent implements OnInit {
         },
       });
     }
+  }
+  ejecutarExport(tipo: 'xls' | 'csv'): void {
+    const dataExport = this.beneficiarios().map(b => ({
+      'RUC Empresa': this.ruc(),
+      'Razón Social': this.razonSocial(),
+      'Nombre y Apellido': b.nombre,
+      Cédula: b.cedula,
+      Nacionalidad: b.nacionalidad,
+      Condición: b.condicion,
+      Participación: b.participacion,
+      Control: b.control,
+      'Fecha de Asunción': b.fechaComunicacion ?? '',
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(dataExport);
+
+    if (tipo === 'xls') {
+      const workbook: XLSX.WorkBook = {
+        Sheets: { Detalle: worksheet },
+        SheetNames: ['Detalle'],
+      };
+
+      const excelBuffer = XLSX.write(workbook, {
+        bookType: 'xlsx',
+        type: 'array',
+      });
+
+      this.saveAsExcelFile(excelBuffer, 'BfRaActualDetalle');
+    } else {
+      const csvData = XLSX.utils.sheet_to_csv(worksheet, { FS: ';' });
+      const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+      saveAs(blob, `BfRaActualDetalle_${Date.now()}.csv`);
+    }
+  }
+  private saveAsExcelFile(buffer: any, fileName: string): void {
+    const data: Blob = new Blob([buffer], {
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8',
+    });
+    saveAs(data, `${fileName}_${Date.now()}.xlsx`);
   }
 }

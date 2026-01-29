@@ -6,7 +6,9 @@ export interface IBfRaActualDetalle {
   nombre?: string;
   cedula?: string;
   nacionalidad?: string;
-  participacionAccionaria?: string;
+  participacion?: string;
+  derechoVotacion?: string;
+  control?: string;
   condicion?: string;
   profesionOcupacion?: string;
   fechaAsuncion?: string;
