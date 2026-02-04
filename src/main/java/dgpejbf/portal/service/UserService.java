@@ -187,45 +187,68 @@ public class UserService {
         LOG.debug("Created Information for User: {}", user);
         return user;
     }
-
     /**
      * Update all information for a specific user, and return the modified user.
      *
      * @param userDTO user to update.
      * @return updated user.
      */
-    public Optional<AdminUserDTO> updateUser(AdminUserDTO userDTO) {
-        return Optional.of(userRepository.findById(userDTO.getId()))
-            .filter(Optional::isPresent)
-            .map(Optional::get)
-            .map(user -> {
-                this.clearUserCaches(user);
-                user.setLogin(userDTO.getLogin().toLowerCase());
-                user.setFirstName(userDTO.getFirstName());
-                user.setLastName(userDTO.getLastName());
-                if (userDTO.getEmail() != null) {
-                    user.setEmail(userDTO.getEmail().toLowerCase());
-                }
-                user.setImageUrl(userDTO.getImageUrl());
-                user.setActivated(userDTO.isActivated());
-                user.setLangKey(userDTO.getLangKey());
-                user.setTelefono(userDTO.getTelefono());
-                Set<Authority> managedAuthorities = user.getAuthorities();
-                managedAuthorities.clear();
-                userDTO
-                    .getAuthorities()
-                    .stream()
-                    .map(authorityRepository::findById)
-                    .filter(Optional::isPresent)
-                    .map(Optional::get)
-                    .forEach(managedAuthorities::add);
-                userRepository.save(user);
-                this.clearUserCaches(user);
-                LOG.debug("Changed Information for User: {}", user);
-                return user;
-            })
-            .map(AdminUserDTO::new);
-    }
+    public Optional<AdminUserDTO> updateUser (AdminUserDTO userDTO) {
+        User user = userRepository.findById(userDTO.getId()).orElseThrow();
+        user.setLogin(userDTO.getLogin().toLowerCase());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
+        if (userDTO.isActivated() && !user.isActivated()) {
+            user.setFechaExpiracion(LocalDate.of(LocalDate.now().getYear(), 12, 31));
+            LOG.debug("Reactivación manual para {}: nueva fecha 31/12", user.getLogin());
+        }
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+        }
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setActivated(userDTO.isActivated());
+        user.setLangKey(userDTO.getLangKey());
+        user.setTelefono(userDTO.getTelefono());
+
+        if (userDTO.getAuthorities() != null) {
+            Set<Authority> authorities = userDTO
+                .getAuthorities()
+                .stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
+        // Establece la fecha de expiración por defecto (31/12 del año actual)
+        user.setFechaExpiracion(LocalDate.of(LocalDate.now().getYear(), 12, 31));
+        userRepository.save(user);
+        this.clearUserCaches(user);
+        LOG.debug("Changed Information for User: {}", user);
+
+        if (userDTO.getEmail() != null) {
+            user.setEmail(userDTO.getEmail().toLowerCase());
+        }
+        user.setImageUrl(userDTO.getImageUrl());
+        user.setActivated(userDTO.isActivated()); // Se actualiza el estado (true/false)
+        user.setLangKey(userDTO.getLangKey());
+        user.setTelefono(userDTO.getTelefono());
+
+        if (userDTO.getAuthorities() != null) {
+            Set<Authority> authorities = userDTO.getAuthorities().stream()
+                .map(authorityRepository::findById)
+                .filter(Optional::isPresent)
+                .map(Optional::get)
+                .collect(Collectors.toSet());
+            user.setAuthorities(authorities);
+        }
+
+        userRepository.save(user);
+        this.clearUserCaches(user);
+        LOG.debug("Changed Information for User: {}", user);
+        return Optional.of(new AdminUserDTO(user));
+    }  
+      
 
     public void deleteUser(String login) {
         userRepository
@@ -236,7 +259,6 @@ public class UserService {
                 LOG.debug("Deleted User: {}", user);
             });
     }
-
     /**
      * Update basic information (first name, last name, email, language) for the current user.
      *
@@ -303,7 +325,7 @@ public class UserService {
      * Not activated users should be automatically deleted after 3 days.
      * <p>
      * This is scheduled to get fired every day, at 01:00 (am).
-     */
+     * comento esta linea de borrado en tres dias de correos no confirmados, por que en mi caso no aplica
     @Scheduled(cron = "0 0 1 * * ?")
     public void removeNotActivatedUsers() {
         userRepository
@@ -313,6 +335,28 @@ public class UserService {
                 userRepository.delete(user);
                 this.clearUserCaches(user);
             });
+    } 
+    */
+   /**
+     * Robot de Control de Acceso:
+     * Revisa todos los días a las 00:05 si la fecha de expiración ha pasado.
+     * Si pasó, el sistema "apaga" el acceso del usuario (activated = false).
+     */
+    @Scheduled(cron = "0 * * * * ?")
+    public void controlarVencimientoManual() {
+        LOG.debug("Iniciando revisión diaria de vencimientos de acceso");
+        LocalDate hoy = LocalDate.now();
+
+        // Solo procesamos a los que hoy están activos
+        userRepository.findAllByActivatedTrue().forEach(user -> {
+            if (user.getFechaExpiracion() != null && user.getFechaExpiracion().isBefore(hoy)) {
+                LOG.info("Acceso EXPIRADO para usuario: {}. Desactivando...", user.getLogin());
+                
+                user.setActivated(false); // El sistema apaga el interruptor
+                userRepository.save(user);
+                this.clearUserCaches(user);
+            }
+        });
     }
 
     /**

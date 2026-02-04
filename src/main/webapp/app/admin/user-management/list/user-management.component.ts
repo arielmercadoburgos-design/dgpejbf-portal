@@ -26,6 +26,7 @@ export default class UserManagementComponent implements OnInit {
   totalItems = signal(0);
   itemsPerPage = ITEMS_PER_PAGE;
   page!: number;
+  today = new Date();
   sortState = sortStateSignal({});
 
   private readonly userService = inject(UserManagementService);

@@ -1,16 +1,17 @@
 package dgpejbf.portal.service.dto;
 
 import dgpejbf.portal.domain.User;
-import jakarta.persistence.Column;
 import java.io.Serializable;
 import java.util.Objects;
-
+import java.time.LocalDate;
 /**
  * A DTO representing a user, with only the public attributes.
  */
 public class UserDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    private LocalDate fechaExpiracion;
 
     private Long id;
 
@@ -22,7 +23,8 @@ public class UserDTO implements Serializable {
 
     public UserDTO(User user) {
         this.id = user.getId();
-        // Customize it here if you need, or not, firstName/lastName/etc
+        this.telefono = user.getTelefono();
+        this.fechaExpiracion = user.getFechaExpiracion();
         this.login = user.getLogin();
     }
 
@@ -44,7 +46,6 @@ public class UserDTO implements Serializable {
 
     //agregue el campo telefono para usuario
 
-    @Column(name = "telefono")
     private String telefono;
 
     public String getTelefono() {
@@ -54,6 +55,14 @@ public class UserDTO implements Serializable {
     public void setTelefono(String telefono) {
         this.telefono = telefono;
     }
+
+    public LocalDate getFechaExpiracion() {
+    return fechaExpiracion;
+}
+
+public void setFechaExpiracion(LocalDate fechaExpiracion) {
+    this.fechaExpiracion = fechaExpiracion;
+}
 
     @Override
     public boolean equals(Object o) {

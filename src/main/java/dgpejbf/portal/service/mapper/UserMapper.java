@@ -33,6 +33,7 @@ public class UserMapper {
     }
 
     public AdminUserDTO userToAdminUserDTO(User user) {
+        
         return new AdminUserDTO(user);
     }
 
@@ -41,6 +42,7 @@ public class UserMapper {
     }
 
     public User userDTOToUser(AdminUserDTO userDTO) {
+        
         if (userDTO == null) {
             return null;
         } else {
@@ -55,9 +57,10 @@ public class UserMapper {
             user.setCreatedBy(userDTO.getCreatedBy());
             user.setCreatedDate(userDTO.getCreatedDate());
             user.setLastModifiedBy(userDTO.getLastModifiedBy());
-            user.setLastModifiedDate(userDTO.getLastModifiedDate());
+            user.setLastModifiedDate(userDTO.getLastModifiedDate());            
             user.setActivated(userDTO.isActivated());
             user.setLangKey(userDTO.getLangKey());
+            user.setFechaExpiracion(userDTO.getFechaExpiracion());
             Set<Authority> authorities = this.authoritiesFromStrings(userDTO.getAuthorities());
             user.setAuthorities(authorities);
             return user;

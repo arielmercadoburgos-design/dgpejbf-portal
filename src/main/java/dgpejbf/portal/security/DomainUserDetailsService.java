@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 /**
  * Authenticate a user from the database.
@@ -31,8 +32,14 @@ public class DomainUserDetailsService implements UserDetailsService {
         this.userRepository = userRepository;
     }
 
+@Transactional(propagation = Propagation.REQUIRES_NEW)
+public void desactivarUsuarioVencido(User user) {
+    LOG.warn("Aplicando desactivación física en BD para el usuario: {}", user.getLogin());
+    user.setActivated(false);
+    userRepository.saveAndFlush(user);
+}
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public UserDetails loadUserByUsername(final String login) {
         LOG.debug("Authenticating {}", login);
 
@@ -51,21 +58,21 @@ public class DomainUserDetailsService implements UserDetailsService {
     }
 
     private org.springframework.security.core.userdetails.User createSpringSecurityUser(String lowercaseLogin, User user) {
+        // 1. PRIMERO revisamos la fecha (Para poder desactivarlo si hace falta)
+        if (user.getFechaExpiracion() != null && user.getFechaExpiracion().isBefore(LocalDate.now())) {
+            if (user.isActivated()) {
+                LOG.warn("USUARIO EXPIRADO: Desactivando a {}", lowercaseLogin);
+                desactivarUsuarioVencido(user); // El método con REQUIRES_NEW que creamos
+        }
+        throw new UserExpiredException(lowercaseLogin);
+    }
+        // 2. SEGUNDO revisamos si está activado (Para usuarios desactivados manualmente)
         if (!user.isActivated()) {
             throw new UserNotActivatedException("User " + lowercaseLogin + " was not activated");
         }
-
-        // 🔍 Log de depuración
-        LOG.debug("Fecha de expiración de {}: {}", lowercaseLogin, user.getFechaExpiracion());
-        //aqui agrego valifación de fecha de expiración ariel mercado 22/10/2025
-
-        if (user.getFechaExpiracion() != null && user.getFechaExpiracion().isBefore(LocalDate.now())) {
-            throw new UserExpiredException(lowercaseLogin);
-        }
-
         return UserWithId.fromUser(user);
     }
-
+    
     public static class UserWithId extends org.springframework.security.core.userdetails.User {
 
         private final Long id;

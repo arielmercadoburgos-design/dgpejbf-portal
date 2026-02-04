@@ -11,6 +11,7 @@ export interface IUser {
   createdDate?: Date;
   lastModifiedBy?: string;
   lastModifiedDate?: Date;
+  fechaExpiracion?: string; // El campo extra fecha expiración
   telefono?: string | null;
 
   // AÑADE TUS CAMPOS DE USER EXTRA AQUÍ
@@ -37,5 +38,6 @@ export class User implements IUser {
     public lastModifiedBy?: string,
     public lastModifiedDate?: Date,
     public telefono?: string | null,
+    public fechaExpiracion?: string, // El campo extra fecha expiración
   ) {}
 }

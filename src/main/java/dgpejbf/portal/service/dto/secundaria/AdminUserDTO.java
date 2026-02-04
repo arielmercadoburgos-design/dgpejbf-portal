@@ -6,6 +6,7 @@ import dgpejbf.portal.domain.User;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,8 @@ public class AdminUserDTO implements Serializable {
 
     private String nroCedula;
 
+    private LocalDate fechaExpiracion;
+
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -74,6 +77,7 @@ public class AdminUserDTO implements Serializable {
         this.createdDate = user.getCreatedDate();
         this.lastModifiedBy = user.getLastModifiedBy();
         this.lastModifiedDate = user.getLastModifiedDate();
+        this.fechaExpiracion = user.getFechaExpiracion();
         this.authorities = user.getAuthorities().stream().map(Authority::getName).collect(Collectors.toSet());
     }
 
@@ -197,6 +201,14 @@ public class AdminUserDTO implements Serializable {
         this.nroCedula = nroCedula;
     }
 
+    public LocalDate getFechaExpiracion() {
+    return fechaExpiracion;
+}
+
+public void setFechaExpiracion(LocalDate fechaExpiracion) {
+    this.fechaExpiracion = fechaExpiracion;
+}
+
     // prettier-ignore
     @Override
     public String toString() {
@@ -213,6 +225,7 @@ public class AdminUserDTO implements Serializable {
             ", createdDate=" + createdDate +
             ", lastModifiedBy='" + lastModifiedBy + '\'' +
             ", lastModifiedDate=" + lastModifiedDate +
+            ", fechaExpiracion=" + fechaExpiracion +
             ", authorities=" + authorities +
             "}";
     }
