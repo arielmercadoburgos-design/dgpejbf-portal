@@ -7,14 +7,14 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import SharedModule from 'app/shared/shared.module';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-
+import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 import { BfRaActualService, IBfRaActual, IPage } from './bf-ra-actual.service';
 
 @Component({
   selector: 'jhi-bf-ra-actual-list',
   templateUrl: './bf-ra-actual-list.component.html',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, FontAwesomeModule, SharedModule],
+  imports: [CommonModule, DatePipe, FormsModule, FontAwesomeModule, SharedModule, HasAnyAuthorityDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BfRaActualListComponent implements OnInit {

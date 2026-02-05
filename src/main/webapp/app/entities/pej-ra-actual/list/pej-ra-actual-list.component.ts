@@ -9,12 +9,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { PejRaActualService, IPejRaActual, IPage } from '../list/pej-ra-actual.service';
 import SharedModule from 'app/shared/shared.module';
 import { ActivatedRoute, Router } from '@angular/router';
+import HasAnyAuthorityDirective from 'app/shared/auth/has-any-authority.directive';
 
 @Component({
   selector: 'jhi-pej-ra-actual-list',
   templateUrl: './pej-ra-actual-list.component.html',
   standalone: true,
-  imports: [CommonModule, DatePipe, FormsModule, FontAwesomeModule, SharedModule],
+  imports: [CommonModule, DatePipe, FormsModule, FontAwesomeModule, SharedModule, HasAnyAuthorityDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PejRaActualListComponent implements OnInit {

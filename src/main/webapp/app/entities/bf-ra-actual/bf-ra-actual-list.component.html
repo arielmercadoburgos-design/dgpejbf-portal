@@ -47,7 +47,7 @@
             <th class="text-start">TIPO</th>
             <th class="text-start">COMUNICACIÓN</th>
             <th class="text-end">FECHA</th>
-            <th class="text-center" style="width: 140px">ACCIÓN</th>
+            <th *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']" class="text-center" style="width: 140px">ACCIÓN</th>
           </tr>
         </thead>
 
@@ -62,7 +62,12 @@
               {{ item.fechaComunicacion | date: 'dd/MM/yyyy' }}
             </td>
             <td class="text-center">
-              <button class="btn btn-sm btn-outline-primary" (click)="verDetalle(item)" title="Ver Detalle">
+              <button
+                *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']"
+                class="btn btn-sm btn-outline-primary"
+                (click)="verDetalle(item)"
+                title="Ver Detalle"
+              >
                 <i class="fa fa-eye me-1"></i> Detalle
               </button>
             </td>

@@ -44,7 +44,7 @@
             <th class="text-start">TIPO</th>
             <th class="text-start">COMUNICACIÓN</th>
             <th class="text-end">FECHA</th>
-            <th class="text-center" style="width: 180px">ACCIONES</th>
+            <th *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']" class="text-center" style="width: 180px">ACCIONES</th>
           </tr>
         </thead>
 
@@ -68,10 +68,20 @@
 
             <td class="text-center">
               <div class="btn-group shadow-sm">
-                <button class="btn btn-sm btn-outline-primary" (click)="verDirectivos(item)" title="Ver Directivos">
+                <button
+                  *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']"
+                  class="btn btn-sm btn-outline-primary"
+                  (click)="verDirectivos(item)"
+                  title="Ver Directivos"
+                >
                   <i class="fa fa-users me-1"></i> Directivos
                 </button>
-                <button class="btn btn-sm btn-outline-success" (click)="verSocios(item)" title="Ver Socios">
+                <button
+                  *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']"
+                  class="btn btn-sm btn-outline-success"
+                  (click)="verSocios(item)"
+                  title="Ver Socios"
+                >
                   <i class="fa fa-handshake me-1"></i> Socios
                 </button>
               </div>

@@ -17,14 +17,14 @@ const routes: Routes = [
   // detalle de directivos
   {
     path: 'directivos/:ruc',
-    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Detalle de Directivos' },
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN'], pageTitle: 'Detalle de Directivos' },
     canActivate: [UserRouteAccessService],
     loadComponent: () => import('./directivos-detalle/directivos-detalle.component').then(m => m.DirectivosDetalleComponent),
   },
   // detalle de socios
   {
     path: 'socios/:ruc',
-    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Detalle de Socios' },
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN'], pageTitle: 'Detalle de Socios' },
     canActivate: [UserRouteAccessService],
     loadComponent: () => import('./socios-detalles/pej-ra-actual-socios.component').then(m => m.PejRaActualSociosListComponent),
   },
@@ -38,7 +38,7 @@ const routes: Routes = [
   // detalle beneficiarios finales
   {
     path: 'detalle/:ruc',
-    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Detalle de Beneficiarios Finales' },
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN'], pageTitle: 'Detalle de Beneficiarios Finales' },
     canActivate: [UserRouteAccessService],
     loadComponent: () => import('./bf-ra-actual-detalle/bf-ra-actual-detalle.component').then(m => m.BfRaActualDetalleComponent),
   },
