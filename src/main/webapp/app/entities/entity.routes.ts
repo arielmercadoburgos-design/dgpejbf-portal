@@ -7,45 +7,40 @@ const routes: Routes = [
     data: { pageTitle: 'monolitoApp.adminAuthority.home.title' },
     loadChildren: () => import('./admin/authority/authority.routes'),
   },
-  {
-    path: 'dashboard', // mi dashboard
-    data: { pageTitle: 'Portal de Datos' },
-    loadChildren: () => import('./dashboard/dashboard.routes'),
-  },
-
+  // grila portal de datos PEJ
   {
     path: 'pej-ra-actual',
-    data: { pageTitle: 'Registros Administrativos' },
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Registros Administrativos' },
+    canActivate: [UserRouteAccessService],
     loadComponent: () => import('./pej-ra-actual/list/pej-ra-actual-list.component').then(m => m.PejRaActualListComponent),
   },
   // detalle de directivos
   {
     path: 'directivos/:ruc',
-    loadComponent: () => import('./directivos-detalle/directivos-detalle.component').then(m => m.DirectivosDetalleComponent),
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Detalle de Directivos' },
     canActivate: [UserRouteAccessService],
-    data: {
-      authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-      pageTitle: 'Detalle de Directivos',
-    },
+    loadComponent: () => import('./directivos-detalle/directivos-detalle.component').then(m => m.DirectivosDetalleComponent),
   },
   // detalle de socios
   {
     path: 'socios/:ruc',
-    loadComponent: () => import('./socios-detalles/pej-ra-actual-socios.component').then(m => m.PejRaActualSociosListComponent),
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Detalle de Socios' },
     canActivate: [UserRouteAccessService],
-    data: {
-      authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-      pageTitle: 'Detalle de Socios',
-    },
+    loadComponent: () => import('./socios-detalles/pej-ra-actual-socios.component').then(m => m.PejRaActualSociosListComponent),
   },
+  // 📁 RUta grilla beneficiarios finales
+  {
+    path: 'bf-ra-actual',
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Beneficiarios Finales' },
+    canActivate: [UserRouteAccessService],
+    loadComponent: () => import('../entities/bf-ra-actual/bf-ra-actual-list.component').then(m => m.BfRaActualListComponent),
+  },
+  // detalle beneficiarios finales
   {
     path: 'detalle/:ruc',
-    loadComponent: () => import('./bf-ra-actual-detalle/bf-ra-actual-detalle.component').then(m => m.BfRaActualDetalleComponent),
+    data: { authorities: ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE'], pageTitle: 'Detalle de Beneficiarios Finales' },
     canActivate: [UserRouteAccessService],
-    data: {
-      authorities: ['ROLE_USER', 'ROLE_ADMIN'],
-      pageTitle: 'Detalle de Beneficiarios Finales',
-    },
+    loadComponent: () => import('./bf-ra-actual-detalle/bf-ra-actual-detalle.component').then(m => m.BfRaActualDetalleComponent),
   },
 ];
 

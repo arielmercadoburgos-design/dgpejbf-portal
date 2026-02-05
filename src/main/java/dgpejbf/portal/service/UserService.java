@@ -322,27 +322,11 @@ public class UserService {
     }
 
     /**
-     * Not activated users should be automatically deleted after 3 days.
-     * <p>
-     * This is scheduled to get fired every day, at 01:00 (am).
-     * comento esta linea de borrado en tres dias de correos no confirmados, por que en mi caso no aplica
-    @Scheduled(cron = "0 0 1 * * ?")
-    public void removeNotActivatedUsers() {
-        userRepository
-            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
-            .forEach(user -> {
-                LOG.debug("Deleting not activated user {}", user.getLogin());
-                userRepository.delete(user);
-                this.clearUserCaches(user);
-            });
-    } 
-    */
-   /**
-     * Robot de Control de Acceso:
+     * Robot 1: de Control de Acceso:
      * Revisa todos los días a las 00:05 si la fecha de expiración ha pasado.
      * Si pasó, el sistema "apaga" el acceso del usuario (activated = false).
      */
-    @Scheduled(cron = "0 * * * * ?")
+    @Scheduled(cron = "0 5 0 * * ?")
     public void controlarVencimientoManual() {
         LOG.debug("Iniciando revisión diaria de vencimientos de acceso");
         LocalDate hoy = LocalDate.now();
@@ -357,6 +341,20 @@ public class UserService {
                 this.clearUserCaches(user);
             }
         });
+    }
+    /**
+     * Robot 2: Borra usuarios no activados después de 3 días..
+     * Se ejecuta todos los días a la 01:00 AM.         
+    */
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void removeNotActivatedUsers() {
+        userRepository
+            .findAllByActivatedIsFalseAndActivationKeyIsNotNullAndCreatedDateBefore(Instant.now().minus(3, ChronoUnit.DAYS))
+            .forEach(user -> {
+                LOG.debug("Deleting not activated user {}", user.getLogin());
+                userRepository.delete(user);
+                this.clearUserCaches(user);
+            });
     }
 
     /**

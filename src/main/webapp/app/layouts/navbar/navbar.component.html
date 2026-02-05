@@ -42,14 +42,14 @@
           </a>
           <ul class="dropdown-menu" ngbDropdownMenu aria-labelledby="entity-menu">
             <!-- agrego mi nuevo boton para el portal de datos -->
-            <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
+            <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE']">
               <a class="dropdown-item d-flex align-items-center" routerLink="/pej-ra-actual" (click)="collapseNavbar()">
                 <fa-icon icon="chart-bar" [fixedWidth]="true" class="me-2"></fa-icon>
 
                 <span>Registro Administrativo - PEJ</span>
               </a>
             </li>
-            <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN']">
+            <li *jhiHasAnyAuthority="['ROLE_USER', 'ROLE_ADMIN', 'ROLE_RECURRENTE']">
               <a class="dropdown-item d-flex align-items-center" routerLink="/bf-ra-actual" (click)="collapseNavbar()">
                 <fa-icon icon="chart-bar" [fixedWidth]="true" class="me-2"></fa-icon>
                 <span>Registro Administrativo - BF</span>
