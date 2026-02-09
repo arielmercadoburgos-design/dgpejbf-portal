@@ -80,26 +80,36 @@ public class BfRaActualResource {
         @RequestParam(required = false) String razonSocial,
         @RequestParam(required = false) String tipo
     ) {
+        log.info("REST request to export CSV: ruc={}, razonSocial={}, tipo={}", ruc, razonSocial, tipo); // 👈 LOG 1
         Integer rucAsInteger = null;
         if (ruc != null && !ruc.isEmpty()) {
             try {
                 rucAsInteger = Integer.valueOf(ruc);
             } catch (NumberFormatException e) {
-                // Manejo silencioso
+                log.error("Error al convertir RUC: {}", ruc); // 👈 LOG 2
             }
         }
 
         List<BfRaActualDTO> datos = service.exportAll(razonSocial, tipo, rucAsInteger);
+        log.info("Datos obtenidos en CSV: {}", datos != null ? datos.size() : "null"); // 👈 LOG 3
 
         StringBuilder csv = new StringBuilder();
         // Cabeceras (ajustar según los campos de BfRaActualDTO)
-        csv.append("RUC;Razon Social;Tipo\n");
+        csv.append("RUC;RazonSocial;Tipo;Comunicacion;FechaComunicacion\n");
 
+        if (datos != null && !datos.isEmpty()) {
         for (BfRaActualDTO dto : datos) {
-            csv.append(dto.getRuc() != null ? dto.getRuc() : "").append(";")
+            csv.append(dto.getRuc() != null ? dto.getRuc().toString() : "").append(";")
                .append(dto.getRazonSocial() != null ? dto.getRazonSocial() : "").append(";")
-               .append(dto.getTipo() != null ? dto.getTipo() : "").append("\n");
+               .append(dto.getTipo() != null ? dto.getTipo() : "").append(";")
+               .append(dto.getTipoComunicacion()!= null ? dto.getTipoComunicacion() : "").append(";")
+               .append(dto.getFechaComunicacion()!= null ? dto.getFechaComunicacion().toString() : "").append("\n");
+
         }
+        }
+            else {
+                log.warn("La lista de datos está vacía."); // 👈 LOG 4
+    }
 
         byte[] csvBytes = csv.toString().getBytes(StandardCharsets.UTF_8);
         ByteArrayResource resource = new ByteArrayResource(csvBytes);

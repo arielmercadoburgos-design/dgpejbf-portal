@@ -14,6 +14,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+
 import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/api/pej-ra-actual")
@@ -40,6 +42,7 @@ public class PejRaActualResource {
         return service.buscar(ruc, razonSocial, tipo, pageable);
     }
     @GetMapping("/export")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER', 'ROLE_RECURRENTE')")
     public List<PejRaActualDTO> exportAll(
         @RequestParam(required = false) String ruc,
         @RequestParam(required = false) String razonSocial,
@@ -59,6 +62,7 @@ public class PejRaActualResource {
     }
 
     @GetMapping("/export-csv")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_USER', 'ROLE_RECURRENTE')")
     public ResponseEntity<Resource> exportCSV(
         @RequestParam(required = false) String ruc,
         @RequestParam(required = false) String razonSocial,

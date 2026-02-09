@@ -148,7 +148,7 @@ export class BfRaActualListComponent implements OnInit {
     this.bfRaActualService.exportAll(filtros).subscribe({
       next: (data: IBfRaActual[]) => {
         if (data.length > 0) {
-          this.bfRaActualService.exportToExcel(data, 'BfRaActual_Completo.xlsx');
+          this.bfRaActualService.exportToExcel(data, 'xlsx.xlsx');
         }
       },
     });
@@ -156,6 +156,22 @@ export class BfRaActualListComponent implements OnInit {
 
   // 📤 Exportar CSV
   exportarCSV(): void {
+    const filtros = this.obtenerFiltrosActuales(); // 👈 Usamos la misma lógica
+
+    // Aquí debes asegurarte de llamar al servicio correcto
+    this.bfRaActualService.exportToCsv(filtros).subscribe({
+      next(blob: Blob) {
+        const fileName = `csv_${new Date().getTime()}.csv`;
+        saveAs(blob, fileName);
+      },
+      error(error) {
+        console.error('Error al exportar CSV', error);
+      },
+    });
+  }
+
+  // 🛠️ Función auxiliar para unificar filtros (copia de seguridad para no repetir código)
+  private obtenerFiltrosActuales(): any {
     const valor = this.busqueda.trim();
     const filtros: any = {};
     if (valor !== '') {
@@ -166,22 +182,6 @@ export class BfRaActualListComponent implements OnInit {
         filtros['tipo'] = valor;
       }
     }
-    this.bfRaActualService.exportToCsv(filtros).subscribe({
-      // Sintaxis corregida (Method Shorthand)
-      next(blob: Blob) {
-        const fileName = `reporte_${new Date().getTime()}.csv`;
-        saveAs(blob, fileName);
-      },
-      error(error) {
-        console.error('Error al exportar CSV', error);
-      },
-    });
-  }
-  private exportDataToExcelFile(data: IBfRaActual[], fileName: string): void {
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(data);
-    const workbook: XLSX.WorkBook = { Sheets: { Datos: worksheet }, SheetNames: ['Datos'] };
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const blob: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    saveAs(blob, fileName);
+    return filtros;
   }
 }

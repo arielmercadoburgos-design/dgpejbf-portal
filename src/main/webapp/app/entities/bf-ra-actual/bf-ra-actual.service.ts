@@ -95,11 +95,21 @@ export class BfRaActualService {
 
   // 📥 Exportar CSV
   exportToCsv(req?: any): Observable<Blob> {
-    const options = createRequestOption(req);
-    return this.http.get(`${this.resourceUrl}/export-csv`, {
-      params: options,
-      responseType: 'blob',
-    });
+    let params = new HttpParams();
+
+    if (req) {
+      if (!req.size) {
+        params = params.set('size', '999999');
+      }
+
+      Object.keys(req).forEach(key => {
+        const value = req[key];
+        if (value !== undefined && value !== null) {
+          params = params.set(key, value.toString());
+        }
+      });
+    }
+    return this.http.get(`${this.resourceUrl}/export-csv`, { params, responseType: 'blob' });
   }
 
   // 📊 Exportar a Excel (helper local)
