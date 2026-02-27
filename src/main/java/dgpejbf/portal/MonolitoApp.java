@@ -13,13 +13,19 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.liquibase.LiquibaseProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.core.env.Environment;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+
+
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
 
 @SpringBootApplication
+@EntityScan("dgpejbf.portal.domain.secundaria") // <--- Esto le dice a Spring dónde buscar a Pais
+@EnableJpaRepositories("dgpejbf.portal.repository.secundaria") // <--- Y dónde buscar el Repo
 @EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
 public class MonolitoApp {
 
